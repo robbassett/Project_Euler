@@ -1,5 +1,6 @@
 import numpy as np
 from utils import *
+import time
 
 # PROJECT EULER 11:
 def euler11():
@@ -7,7 +8,6 @@ def euler11():
 
     grid = np.reshape(np.array(grid.split()).astype(float),(20,20))
     mx = 0
-    print(grid.shape)
     for j in range(16):
         for i in range(20):
             try:
@@ -84,16 +84,112 @@ def euler14():
             v = i
 
     return v
+
+# PROJECT EULER 15
+def euler15(N):
+    prev = [1,2,3]
+    row = 3
+    while row <= N+1:
+        new = [1 for i in range(row)]
+        for i in range(1,row-1):
+            new[i] = new[i-1]+prev[i]
+        new[-1] = 2*new[-2]
+        prev = [i for i in new]
+        row += 1
+    return new[-1]
+
+# PROJECT EULER 16
+def euler16(N):
+    return np.sum([int(_) for _ in str(2**N)])
+
+# PROJECT EULER 17
+def euler17(N):
+        
+    count_dic = {
+        1:3,
+        2:3,
+        3:5,
+        4:4,
+        5:4,
+        6:3,
+        7:5,
+        8:5,
+        9:4,
+        10:3,
+        11:6,
+        12:6,
+        13:8,
+        14:8,
+        15:7,
+        16:7,
+        17:9,
+        18:8,
+        19:8,
+        20:6,
+        30:6,
+        40:5,
+        50:5,
+        60:5,
+        70:7,
+        80:6,
+        90:6
+    }
+
+    count = 0
+    for i in range(1,N+1):
+        if len(str(i)) == 1:
+            count += count_dic[i]
+        elif len(str(i)) == 2:
+            if i in count_dic.keys():
+                count += count_dic[i]
+            else:
+                tens = int(str(i)[0]+'0')
+                ones = int(str(i)[1])
+                count += count_dic[tens]
+                count += count_dic[ones]
+        elif len(str(i)) == 3:
+            count += count_dic[int(str(i)[0])]
+            count += 7
+            
+            if i%100 != 0:
+                tens = int(str(i)[1:])
+                if tens in count_dic.keys():
+                    count += count_dic[tens]
+                else:
+                    tt = int(str(tens)[0]+'0')
+                    ones = int(str(tens)[1])
+                    count += count_dic[tt]
+                    count += count_dic[ones]
+                count += 3
+        else:
+            count += len('onethousand')
+    return count
                 
 if __name__ == '__main__':
     # ELEVEN
-    print(f'Problem 11: {euler11()}')
-
+    st = time.time()
+    print(f'Problem 11: {euler11()} ({time.time()-st} s)')
+    
     # TWELVE
-    print(f'Problem 12: {euler12(500)}')
+    st = time.time()
+    print(f'Problem 12: {euler12(500)} ({time.time()-st} s)')
 
     # THIRTEEN
-    print(f'Problem 13: {euler13()}')
+    st = time.time()
+    print(f'Problem 13: {euler13()} ({time.time()-st} s)')
 
     # FOURTEEN
-    print(f'Problem 14: {euler14()}')
+    st = time.time()
+    print(f'Problem 14: {euler14()} ({time.time()-st} s)')
+
+    # FIFTEEN
+    st = time.time()
+    print(f'Problem 15: {euler15(20)} ({time.time()-st} s)')
+
+    # SIXTEEN
+    st = time.time()
+    print(f'Problem 16: {euler16(1000)} ({time.time()-st} s)')
+    
+    # SEVENTEEN
+    st = time.time()
+    print(f'Problem 17: {euler17(1000)} ({time.time()-st} s)')
