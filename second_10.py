@@ -48,6 +48,42 @@ def euler12(ndiv):
         else:
             n+=1
     return int(np.linspace(1,n,n).sum())
+
+# PROJECT EULER 13
+def euler13():
+    d = np.loadtxt('aux/e13.dat',np.float64).sum()
+    a = str(d)
+    out = ''
+    ind = 0
+    while len(out) < 10:
+        if a[ind] != '.': out+=a[ind]
+        ind+=1
+    return out
+
+# PROJECT EULER 14
+def euler14():
+    def cseq(N):
+        s = [N]
+        n = N
+        while n != 1:
+            if n%2 == 0:
+                n/=2
+            else:
+                n = 3*n + 1
+            s.append(int(n))
+        return s
+
+    ls = []
+    mx = int(1e6)
+    a = 0
+    v = 0
+    for i in range(1,mx+1):
+        seq = cseq(i)
+        if len(seq) > a:
+            a = len(seq)
+            v = i
+
+    return v
                 
 if __name__ == '__main__':
     # ELEVEN
@@ -55,3 +91,9 @@ if __name__ == '__main__':
 
     # TWELVE
     print(f'Problem 12: {euler12(500)}')
+
+    # THIRTEEN
+    print(f'Problem 13: {euler13()}')
+
+    # FOURTEEN
+    print(f'Problem 14: {euler14()}')
