@@ -1,5 +1,22 @@
 import numpy as np
 
+def factorial(N):
+    return int(np.linspace(1,N,N).prod())
+
+def big_factorial(N):
+    V = [1]
+    carry = 0
+    for n in np.linspace(2,N,N-1):
+        for i,v in enumerate(V):
+            carry,t = divmod(v*n + carry,10)
+            V[i] = t
+        if carry != 0:
+            for c in str(int(carry))[::-1]:
+                V = V+[int(c)]
+            carry = 0
+    return V
+            
+
 def fibonacci(Nterms):
     out = np.zeros(Nterms)
     out[0],out[1] = 1,2

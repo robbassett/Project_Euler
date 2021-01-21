@@ -164,6 +164,49 @@ def euler17(N):
         else:
             count += len('onethousand')
     return count
+
+# PROJECT EULER 18/67 (67 same but larger, might as well do it here)
+def euler18(ff):
+    def load_triangle(f):
+        lines = open(f,'r').readlines()
+        out = [[float(lines[0])]]
+        for i in range(1,len(lines)):
+            tm = [float(n) for n in lines[i].split()]
+            out.append(tm)
+        return out
+
+    tri = load_triangle(ff)
+    prev = tri[-1]
+    for i in range(len(tri)-2,-1,-1):
+        cur = tri[i]
+        aug = [0 for j in range(len(cur))]
+        for j,v in enumerate(cur):
+            aug[j] = max([v+prev[j],v+prev[j+1]])
+        prev = [j for j in aug]
+    return int(aug[0])
+
+# PROJECT EULER 19
+def euler19():
+    days = 1
+    yr = 1900
+    count = 0
+    while yr < 2000:
+        for m in range(1,13):
+            if m in [4,6,9,11]:
+                days += 30
+            elif m != 2:
+                days += 31
+            else:
+                days += 28
+                if yr%4 == 0: days +=1
+            if days%7 == 0: count+=1
+        yr += 1
+
+    return count
+
+# PROJECT EULER 20
+def euler20(N):
+    return int(np.sum(big_factorial(N)))
                 
 if __name__ == '__main__':
     # ELEVEN
@@ -193,3 +236,21 @@ if __name__ == '__main__':
     # SEVENTEEN
     st = time.time()
     print(f'Problem 17: {euler17(1000)} ({time.time()-st} s)')
+
+    # EIGHTEEN
+    st = time.time()
+    f = 'aux/e18.dat'
+    print(f'Problem 18: {euler18(f)} ({time.time()-st} s)')
+
+    # SIXTY SEVEN
+    st = time.time()
+    f = 'aux/e67.dat'
+    print(f'Problem 67: {euler18(f)} ({time.time()-st} s)')
+
+    # NINETEEN
+    st = time.time()
+    print(f'Problem 19: {euler19()} ({time.time()-st} s)')
+
+    # TWENTY
+    st = time.time()
+    print(f'Problem 20: {euler20(100)} ({time.time()-st} s)')
