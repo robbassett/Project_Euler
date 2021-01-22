@@ -48,11 +48,14 @@ def n_primes(n):
             j += 1
     return p
 
-def get_factors(n):
+def get_factors(n,excl_N=False):
     fcts = []
     for i in range(int(np.sqrt(n))):
         if n%(i+1) == 0:
             fcts.append(i+1)
             if (n/(i+1)) not in fcts:
-                fcts.append(n/(i+1))
+                if (n/(i+1)) == n and excl_N:
+                    pass
+                else:
+                    fcts.append(int(n/(i+1)))
     return fcts
