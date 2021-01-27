@@ -1,7 +1,10 @@
 import numpy as np
 
 def factorial(N):
-    return int(np.linspace(1,N,N).prod())
+    if N != 0:
+        return int(np.linspace(1,N,N).prod())
+    else:
+        return 1
 
 def big_factorial(N):
     V = [1]
