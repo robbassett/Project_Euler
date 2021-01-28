@@ -142,6 +142,83 @@ def euler37(n):
             
     return np.sum(trunc)
 
+# PROJECT EULER 38:
+def euler38():
+    def l2n(l):
+        n = ''
+        for i in l: n +=str(i)
+        return int(n)
+    def n2l(n):
+        return [int(i) for i in str(n)]
+    
+    pdn = list(itertools.permutations([1,2,3,4,5,6,7,8,9]))[::-1]
+    for t in pdn:
+        for i in range(1,len(t)):
+            fl = 1
+            l1 = n2l(l2n(t[:i]))
+            l2 = n2l(l2n(t[:i])*2)
+            ch = n2l(l2n(t[i:i+len(l2)]))
+            if l2 == ch:
+                i2 = i+len(l2)
+                f = 3
+                done = False
+                if i2 == 9:
+                    fl = 0
+                    done = True
+                while not done:
+                    tl = n2l(l2n(t[:i])*f)
+                    try:
+                        if n2l(l2n(t[i2:i2+len(tl)])) == tl:
+                            if i2+len(tl) >= 9:
+                                fl = 0
+                                done = True
+                            else:
+                                i2 += len(tl)
+                                f += 1
+                        else:
+                            done = True
+                    except:
+                        done = True
+            if fl == 0:
+                break
+        if fl == 0:
+            out = l2n(t)
+            break
+    return out
+
+# PROJECT EULER 39:
+def euler39(mx):
+    def get_combos(p):
+        cs = []
+        for a in range(1,int(p/3)):
+            for b in range(a,int(2*p/3)):
+                c = np.sqrt(a*a + b*b)
+                if a + b + c == p:
+                    cs.append([a,b,int(c)])
+        return cs
+
+    ans = 0
+    m = 0
+    for i in range(10,mx+1):
+        cc = get_combos(i)
+        if len(cc) > m:
+            ans = i
+            m = len(cc)
+
+    return ans
+
+# PROJECT EULER 40:
+def euler40(l):
+    n = ''
+    i=1
+    while len(n) < max(l):
+        n+=str(i)
+        i+=1
+    out = np.zeros(len(l))
+    for i,v in enumerate(l): out[i] = int(n[v-1])
+
+    return int(np.prod(out))
+
 if __name__ == '__main__':
     # THIRTY ONE:
     st = time.time()
@@ -169,5 +246,18 @@ if __name__ == '__main__':
     
     # THIRTY SEVEN (SUPER SLOW!):
     st = time.time()
-    print(f'Problem 37: {euler37(11)} ({time.time()-st} s)')
+    #print(f'Problem 37: {euler37(11)} ({time.time()-st} s)')
+
+    # THIRTY EIGHT:
+    st = time.time()
+    print(f'Problem 38: {euler38()} ({time.time()-st} s)')
+
+    # THIRTY NINE (NOT FAST):
+    st = time.time()
+    print(f'Problem 39: {euler39(1000)} ({time.time()-st} s)')
+
+    # FORTY:
+    st = time.time()
+    print(f'Problem 40: {euler40([1,10,100,1000,10000,100000,1000000])} ({time.time()-st} s)')
+    
     
