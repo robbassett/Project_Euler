@@ -105,6 +105,68 @@ def euler46():
         if f == 1:
             return v
 
+# PROJECT EULER 47:
+def euler47(N):
+    mx_guess = 10**N
+    ps = primes_lt_n(mx_guess)
+    cnt = 0
+    n = 5
+    while cnt < N:
+        fs = get_factors(n)
+        fps = np.intersect1d(fs,ps)
+        if len(fps) == N:
+            cnt+=1
+        else:
+            cnt = 0
+        n+=1
+    return n-N
+
+# PROJECT EULER 48:
+def euler48():
+    tm = 0
+    for i in range(1,1001): tm+=(i**i)
+    return int(str(tm)[-10:])
+
+# PROJECT EULER 49:
+def euler49():
+    ps = primes_lt_n(10000)
+    for p in ps:
+        if p > 999:
+            tm = [i for i in str(p)]
+            perms = list(itertools.permutations(tm))
+            ch = []
+            for perm in set(perms):
+                mt = ''
+                for v in perm: mt+=v
+                if int(mt) > 999:
+                    mt = int(mt)
+                    if mt in ps: ch.append(mt)
+            ch.sort()
+            if len(ch) > 2:
+                for i in range(len(ch)-2):
+                    for j in range(i+1,len(ch)):
+                        tm = ch[j]-ch[i]
+                        if ch[j]+tm in ch:
+                            ans = f'{ch[i]}{ch[j]}{ch[j]+tm}'
+                            break
+    return ans
+
+# PROJECT EULER 50:
+def euler50(mx):
+    ps = primes_lt_n(int(mx))
+    mx_guess = 5000
+    done = False
+    while not done:
+        mx_guess-=1
+        for i in range(len(ps)-mx_guess):
+            tm = sum(ps[i:i+mx_guess])
+            if tm in ps:
+                done = True
+                break
+            elif tm > mx:
+                break
+    return sum(ps[i:i+mx_guess])
+
 if __name__ == '__main__':
     # FORTY ONE:
     st = time.time()
@@ -129,3 +191,19 @@ if __name__ == '__main__':
     # FORTY SIX:
     st = time.time()
     print(f'Problem 46: {euler46()} ({time.time()-st} s)')
+    
+    # FORTY SEVEN:
+    st = time.time()
+    print(f'Problem 47: {euler47(4)} ({time.time()-st} s)')
+    
+    # FORTY EIGHT:
+    st = time.time()
+    print(f'Problem 48: {euler48()} ({time.time()-st} s)')
+    
+    # FORTY NINE:
+    st = time.time()
+    print(f'Problem 49: {euler49()} ({time.time()-st} s)')
+    
+    # FIFTY:
+    st = time.time()
+    print(f'Problem 50: {euler50(1.e6)} ({time.time()-st} s)')
