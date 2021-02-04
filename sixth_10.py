@@ -182,6 +182,75 @@ def euler57():
         ln,ld = bn,bd
     return count
 
+# PROJECT EULER 58:
+def euler58(target):
+    cnt = 1
+    pcnt = 0
+    cv = 1
+    ext = 2
+    curr = 100
+    while curr > target:
+        cnt+=4
+        for i in range(4):
+            if is_prime(cv+(i+1)*ext): pcnt+=1
+        cv += 4*ext
+        curr = pcnt/cnt
+        sl = ext+1
+        ext+=2
+
+    return sl
+
+# PROJECT EULER 59:
+def euler59():
+    b = open('aux/e59.dat','r').readline().split(',')
+    b[-1] = b[-1][:-1]
+    ords = [ord(v) for v in ['e','a','r','i','o','t','n','s']]
+    pk = np.arange(97,123,1).astype(int)
+    l1,l2,l3 = [],[],[]
+    for i,v in enumerate(b):
+        if i%3 == 0:
+            l1.append(int(v))
+        elif i%3 == 1:
+            l2.append(int(v))
+        else:
+            l3.append(int(v))
+            
+    key = ['0','0','0']
+    for i,l in enumerate([l1,l2,l3]):
+        freqs = np.zeros(pk.shape)
+        for j,p in enumerate(pk):
+            c = 0
+            for v in l:
+                if v^p in ords: c+=1
+            freqs[j] = c
+        key[i] = pk[np.argmax(freqs)]
+
+    out = 0
+    for i,v in enumerate(b):
+        out += int(v)^key[i%3]
+    return out
+
+# PROJECT EULER 60:
+def euler60():
+    def check(v1,v2):
+        if is_prime(int(str(v1)+str(v2))) and is_prime(int(str(v2)+str(v1))):
+            return True
+        else:
+            return False
+    
+    mx_guess = 10000
+    ps = primes_lt_n(mx_guess)
+    for i,a in enumerate(ps):
+        for j,b in enumerate(ps[i+1:]):
+            if check(a,b):
+                for k,c in enumerate(ps[j+1:]):
+                    if check(a,c) and check(b,c):
+                        for l,d in enumerate(ps[k+1:]):
+                            if check(a,d) and check(b,d) and check(c,d):
+                                for m,e in enumerate(ps[l+1:]):
+                                    if check(a,e) and check(b,e) and check(c,e) and check(d,e):
+                                        return sum([a,b,c,d,e])
+
 if __name__ == '__main__':
     # FIFTY ONE:
     st = time.time()
@@ -210,3 +279,15 @@ if __name__ == '__main__':
     # FIFTY SEVEN:
     st = time.time()
     print(f'Problem 57: {euler57()} ({time.time()-st} s)')
+    
+    # FIFTY EIGHT:
+    st = time.time()
+    print(f'Problem 58: {euler58(0.1)} ({time.time()-st} s)')
+    
+    # FIFTY NINE:
+    st = time.time()
+    print(f'Problem 59: {euler59()} ({time.time()-st} s)')
+    
+    # SIXTY:
+    st = time.time()
+    print(f'Problem 60: {euler60()} ({time.time()-st} s)')

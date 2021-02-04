@@ -1,4 +1,20 @@
 import numpy as np
+import itertools
+
+def char_position(letter):
+    if letter.islower():
+        return ord(letter) - 96
+    else:
+        return ord(letter.lower())-96
+
+def get_pandigitals():
+    pdn = list(itertools.permutations([1,2,3,4,5,6,7,8,9]))
+    out = np.zeros(len(pdn)).astype(int)
+    for i,p in enumerate(pdn):
+        t = ''
+        for v in p: t+=str(v)
+        out[i] = int(t)
+    return out
 
 def factorial(N):
     if N != 0:
@@ -50,6 +66,14 @@ def n_primes(n):
                 p.append(c)
             j += 1
     return p
+
+def is_prime(n):
+    """function to find if the given
+    number is prime"""
+    for i in range(3, int(n**0.5)+1, 2):
+        if n % i == 0:
+            return False
+    return True
 
 def get_factors(n,excl_N=False):
     fcts = []
