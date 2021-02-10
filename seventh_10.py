@@ -268,6 +268,41 @@ def euler68():
         if len(good_combs) != 0:
             return max(good_combs)
 
+# PROJECT EULER 69
+def euler69(N):
+    done = False
+    mx = 5
+    while primes_lt_n(mx).prod() < N:
+        mx+=1
+    return primes_lt_n(mx)[:-1].prod()
+
+# PROJECT EULER 70
+def euler70():
+    def phi(n):
+        fct = get_factors(n,excl_N=True)
+        return n-(fct[1]-1+fct[-1])
+
+    def check_permut(v1,v2):
+        l1 = [int(v) for v in str(v1)]
+        l2 = [int(v) for v in str(v2)]
+        l1.sort()
+        l2.sort()
+        if l1 == l2:
+            return True
+        return False
+
+    ps = primes_lt_n(4000)
+    ps = ps[np.where(ps > 2000)[0]] 
+    X,Y = np.meshgrid(ps,ps)
+    ps = list(set(np.reshape(X*Y,(len(ps)*len(ps)))))
+    ps.sort()
+    ps = ps[::-1]
+    for v in ps:
+        if v < 1.e7 and v != 8357821:
+            ph = phi(v)
+            if check_permut(v,ph):
+                return v
+
 if __name__ == '__main__':
     # SIXTY ONE:
     st = time.time()
@@ -299,4 +334,12 @@ if __name__ == '__main__':
     # SIXTY EIGHT:
     st = time.time()
     print(f'Problem 68: {euler68()} ({time.time()-st} s)')
+    
+    # SIXTY NINE:
+    st = time.time()
+    print(f'Problem 69: {euler69(1.e6)} ({time.time()-st} s)')
+    
+    # SEVENTY:
+    st = time.time()
+    print(f'Problem 70: {euler70()} ({time.time()-st} s)')
     
