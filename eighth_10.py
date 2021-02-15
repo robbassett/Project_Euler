@@ -108,6 +108,33 @@ def euler75(mxL):
             
     return ans
 
+# PROJECT EULER 76
+def euler76(total):
+    coins = np.linspace(1,total,total).astype(int)
+    combs = np.zeros((total+1,len(coins)))
+    for v in range(combs.shape[0]):
+        target = v+1
+        for i,c in enumerate(coins):
+            if i == 0: combs[v][i] = 1
+            elif c <= target:
+                combs[v][i] = combs[v][i-1] + combs[target - c - 1][i]
+            else:
+                combs[v][i] = combs[v][i-1]
+    return int(combs[-1][-1]-1)
+
+# PROJECT EULER 77
+def euler77(targ):
+    ps = primes_lt_n(100)
+    v = 2
+    while True:
+        comb = [1]+[0]*v
+        for p in ps:
+            for i in range(p,v+1):
+                comb[i] += comb[i-p]
+        if comb[v] > targ:
+            return v
+        v+=1
+
 if __name__ == '__main__':
     # SEVENTY ONE:
     st = time.time()
@@ -128,5 +155,13 @@ if __name__ == '__main__':
     # SEVENTY FIVE:
     st = time.time()
     print(f'Problem 75: {euler75(1500000)} ({time.time()-st} s)')
+    
+    # SEVENTY SIX:
+    st = time.time()
+    print(f'Problem 76: {euler76(100)} ({time.time()-st} s)')
+    
+    # SEVENTY SEVEN:
+    st = time.time()
+    print(f'Problem 77: {euler77(5000)} ({time.time()-st} s)')
     
     
