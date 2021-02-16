@@ -135,6 +135,92 @@ def euler77(targ):
             return v
         v+=1
 
+# PROJECT EULER 78
+def euler78():
+    pn = [1]
+    pe = [1]
+    s = [1]
+    sc = 1
+    j = -1
+    n = 1
+    while True:
+        npe = (3*j*j-j)/2
+        while npe <= n:
+            sc += 1
+            s.append(1 if sc <= 2 else -1)
+            if sc > 3: sc = 0
+            pe.append(int(npe))
+            
+            if j > 0:
+                j *= -1
+            else:
+                j = (j*-1)+1
+                    
+            npe = (3*j*j-j)/2
+        pn.append(0)
+        inds = n-np.array(pe)
+        for i,I in enumerate(inds): pn[-1] += int(s[i]*pn[I])
+        
+        if str(pn[-1])[-6:] == '000000':
+            return n
+        
+        n+=1
+
+# PROJECT EULER 79
+def euler79():
+    dat = open('aux/e79.dat','r').readlines()
+    tries = np.zeros((len(dat),3))
+    for i,d in enumerate(dat):
+        tries[i] = [int(v) for v in str(d)[:-1]]
+
+    dic = {}
+    for n in np.unique(tries):
+        dic[n] = set([])
+    for t in tries:
+        dic[t[1]].add(t[0])
+        dic[t[2]].add(t[0])
+        dic[t[2]].add(t[1])
+
+    pwd = np.zeros(len(np.unique(tries)))
+    for k in dic.keys():
+       pwd[len(dic[k])] = k
+    out = ''
+    for v in pwd:
+        out+=str(int(v))
+    return out
+
+# PROJECT EULER 80
+def euler80():
+    def sqrt_100(n,n_decimal=99):
+        if np.sqrt(n)%1 == 0:
+            return 0
+        d = 1
+        while d*d <= n:
+            d += 1
+        root = d-1
+        c = (n-root*root)*100
+        out = root
+        for i in range(n_decimal):
+            p = 20*root
+            if p > c:
+                root*=10
+                c*=100
+            else:
+                st = 1
+                while (p+st)*st < c:
+                    st += 1
+                x = st-1
+                root = (root*10)+x
+                c -= (p+x)*x
+                c *= 100
+                out += x
+        return out
+
+    ans = 0
+    for i in range(2,100):
+        ans += sqrt_100(i)
+    return ans
+        
 if __name__ == '__main__':
     # SEVENTY ONE:
     st = time.time()
@@ -163,5 +249,17 @@ if __name__ == '__main__':
     # SEVENTY SEVEN:
     st = time.time()
     print(f'Problem 77: {euler77(5000)} ({time.time()-st} s)')
+    
+    # SEVENTY EIGHT:
+    st = time.time()
+    print(f'Problem 78: {euler78()} ({time.time()-st} s)')
+    
+    # SEVENTY NINE:
+    st = time.time()
+    print(f'Problem 79: {euler79()} ({time.time()-st} s)')
+    
+    # EIGHTY:
+    st = time.time()
+    print(f'Problem 80: {euler80()} ({time.time()-st} s)')
     
     
