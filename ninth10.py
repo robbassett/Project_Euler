@@ -44,6 +44,44 @@ def euler82():
 
     min_sum = min_sum.min(axis=0)
     return int(min_sum[:,-1].min())
+
+# PROJECT EULER 83
+def euler83():
+    d = open('aux/e81.dat','r').readlines()
+    m = np.zeros((len(d),len(d)))
+    for i in range(len(d)):
+        m[i] = np.array(d[i].split(',')).astype(int)
+
+    v = np.zeros(m.shape) + np.nan
+    g = np.empty(m.shape) + 1.e40
+    g[0,0] = m[0,0]
+    current_node = (0,0)
+    mxr,mxc = 0,0
+    op = [current_node]
+    while len(op) != 0:
+        for ij in [(-1,0),(1,0),(0,-1),(0,1)]:
+            check_node = (current_node[0]+ij[0],current_node[1]+ij[1])
+            if check_node[0] >= 0 and check_node[1] >= 0 and check_node[0] < m.shape[0] and check_node[1] < m.shape[0]:
+                if g[check_node] > m[check_node]+g[current_node]:
+                    g[check_node] = m[check_node]+g[current_node]
+                    if check_node not in op:
+                        v[check_node] = np.nan
+                        op.append(check_node)
+        op.remove(current_node)
+        v[current_node] = 1.0
+
+        if len(op) == 0:
+            break
+        
+        vals = np.zeros(len(op))
+        for i,c in enumerate(op):
+            vals[i] = g[c]
+            if c[0] > mxr: mxr = c[0]
+            if c[1] > mxc: mxc = c[1]
+
+        current_node = op[np.argmin(vals)]
+
+    return int(g[-1,-1])
         
 if __name__ == '__main__':
     # EIGHTY ONE:
@@ -53,3 +91,8 @@ if __name__ == '__main__':
     # EIGHTY TWO:
     st = time.time()
     print(f'Problem 82: {euler82()} ({time.time()-st} s)')
+
+    # EIGHTY THREE (Dijkstra's Algorithm):
+    st = time.time()
+    print(f'Problem 83: {euler83()} ({time.time()-st} s)')
+    
