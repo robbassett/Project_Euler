@@ -82,7 +82,116 @@ def euler83():
         current_node = op[np.argmin(vals)]
 
     return int(g[-1,-1])
+
+# PROJECT EULER 84
+def euler84(n_side):
+    
+    def roll():
+        vals = np.random.randint(1,n_side+1,2)
+        doub = True if vals[0] == vals[1] else False
+    
+        return vals.sum().astype(int),doub
+
+    def CC(ccn,cc_stack):
+        i = ccn%16
+        if cc_stack[i] == 0:
+            return 0
+        if cc_stack[i] == 1:
+            return 10
+        return -1
+
+    def CH(sp,chn,ch_stack):
+        i = chn%16
+        if ch_stack[i] == 0:
+            return 0
+        if ch_stack[i] == 1:
+            return 10
+        if ch_stack[i] == 2:
+            return 11
+        if ch_stack[i] == 3:
+            return 24
+        if ch_stack[i] == 4:
+            return 39
+        if ch_stack[i] == 5:
+            return 5
+        if ch_stack[i] in [6,7]:
+            if sp == 7:
+                return 15
+            if sp == 22:
+                return 25
+            if sp == 36:
+                return 5
+        if ch_stack[i] == 8:
+            if sp in [7,36]:
+                return 12
+            if sp == 22:
+                return 28
+        if ch_stack[i] == 9:
+            return sp - 3
+        return -1
+
+    cc_stack = np.linspace(0,16,16).astype(int)
+    np.random.shuffle(cc_stack)
+    ccn = 0
+    
+    ch_stack = np.linspace(0,16,16).astype(int)
+    np.random.shuffle(ch_stack)
+    chn = 0
+    
+    counts = np.zeros(40)
+    nrolls = 500000
+    sp = 0
+    dcount = 0
+    for _ in range(nrolls):
+        r,d = roll()
+        if d:
+            dcount += 1
+        else:
+            dcount = 0
+
+        if dcount == 3:
+            sp = 10
+            
+        else:
+            sp += r
+            if sp in [2,17,33]:
+                t = CC(ccn,cc_stack)
+                ccn+=1
+                if t != -1: sp = t
+            if sp in [7,22,36]:
+                t = CH(sp,chn,ch_stack)
+                chn+=1
+                if t != -1: sp = t
         
+        if sp == 30:
+            sp = 10
+        
+        if sp > 39:
+            sp -= 40
+        
+        counts[int(sp)] += 1
+    
+    probs = counts/nrolls
+    ans = np.argsort(probs)[::-1][:3]
+    out = ''
+    for a in ans: out+=str(a)
+    return out
+
+# PROJECT EULER 85
+def euler85():
+    def Nrec(H,W):
+        n = 0
+        for i in range(H):
+            for j in range(W): n+=(H-i)*(W-j)
+        return n
+    
+    W = 100
+    x,y = [],[]
+    for w in range(1,W):
+        for h in range(1,w-1):
+            if abs(Nrec(h,w)-2.e6) < 50:
+                return int(h*w)
+
 if __name__ == '__main__':
     # EIGHTY ONE:
     st = time.time()
@@ -95,4 +204,12 @@ if __name__ == '__main__':
     # EIGHTY THREE (Dijkstra's Algorithm):
     st = time.time()
     print(f'Problem 83: {euler83()} ({time.time()-st} s)')
+
+    # EIGHTY FOUR (MC sim):
+    st = time.time()
+    print(f'Problem 84: {euler84(4)} ({time.time()-st} s)')
+
+    # EIGHTY FIVE:
+    st = time.time()
+    print(f'Problem 85: {euler85()} ({time.time()-st} s)')
     
