@@ -192,6 +192,50 @@ def euler85():
             if abs(Nrec(h,w)-2.e6) < 50:
                 return int(h*w)
 
+# PROJECT EULER 86
+def euler86(targ):
+    count = 0
+    l = 1
+    while True:
+        for o in range(1,2*l):
+            if np.sqrt(o*o + l*l)%1 == 0:
+                if o <= l:
+                    count += int(o/2)
+                else:
+                    count += 1+l-o/2
+        l+=1
+        if count >= targ:
+            break
+    return l
+
+# PROJECT EULER 87
+def euler87(targ):
+    ps = primes_lt_n(10000)
+    i,j,k = 0,0,0
+    nums = []
+    while True:
+        a = ps[i]
+        v1 = a*a
+        if v1+np.power(ps[0],3)+np.power(ps[0],4) > targ:
+            break
+        while True:
+           b = ps[j]
+           v2 = b*b*b
+           if v1+v2+np.power(ps[0],4) > targ:
+               j = 0
+               break
+           while True:
+               c = ps[k]
+               v3 = c*c*c*c
+               if v1+v2+v3 > targ:
+                   k = 0
+                   break
+               nums.append(v1+v2+v3)
+               k+=1
+           j+=1
+        i+=1
+    return len(set(nums))
+
 if __name__ == '__main__':
     # EIGHTY ONE:
     st = time.time()
@@ -212,4 +256,12 @@ if __name__ == '__main__':
     # EIGHTY FIVE:
     st = time.time()
     print(f'Problem 85: {euler85()} ({time.time()-st} s)')
+
+    # EIGHTY SIX:
+    st = time.time()
+    print(f'Problem 86: {euler86(1e6)} ({time.time()-st} s)')
+
+    # EIGHTY SEVEN:
+    st = time.time()
+    print(f'Problem 87: {euler87(5e7)} ({time.time()-st} s)')
     
