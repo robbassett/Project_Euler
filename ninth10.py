@@ -236,6 +236,39 @@ def euler87(targ):
         i+=1
     return len(set(nums))
 
+# PROJECT EULER 88
+def euler88(K):
+    def check(N,L,V):
+        tmp = V.prod()
+        tmk = tmp-V.sum()+L
+        N[int(tmk-2)] = min([tmp,N[int(tmk-2)]])
+    
+    nums = (np.zeros(K-1)+1000000).astype(np.int64)
+    max_l = K
+    L = 2
+    while L <= 14:
+        vals = (2*np.ones(L)).astype(np.int64)
+        fl = 0
+        while True:
+            try:
+                check(nums,L,vals)
+            except:
+                pass
+            ind = 0
+            while vals.prod() >= 2*K:
+                ind += 1
+                try:
+                    vals[:ind] = vals[ind]+1
+                except:
+                    fl = 1
+                    break
+            if fl == 1:
+                break
+            vals[ind]+=1
+            ind -= 1
+        L += 1  
+    return np.sum(list(set(nums))).astype(int)
+
 if __name__ == '__main__':
     # EIGHTY ONE:
     st = time.time()
@@ -264,4 +297,8 @@ if __name__ == '__main__':
     # EIGHTY SEVEN:
     st = time.time()
     print(f'Problem 87: {euler87(5e7)} ({time.time()-st} s)')
+
+    # EIGHTY EIGHT:
+    st = time.time()
+    print(f'Problem 88: {euler88(12000)} ({time.time()-st} s)')
     
