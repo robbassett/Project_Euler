@@ -269,6 +269,76 @@ def euler88(K):
         L += 1  
     return np.sum(list(set(nums))).astype(int)
 
+# PROJECT EULER 89
+def euler89():
+    def parse(N):
+        v = ['I','V','X','L','C','D','M']
+        n = np.array([1,5,10,50,100,500,1000])
+        c = np.zeros(len(n))
+        for i,s in enumerate(v):
+            c[i] = N.count(s)
+        if 'IV' in N:
+            c[0] += 3
+            c[1] -= 1
+        if 'IX' in N:
+            c[0] += 8
+            c[2] -= 1
+        if 'XL' in N:
+            c[2] += 3
+            c[3] -= 1
+        if 'XC' in N:
+            c[2] += 8
+            c[4] -= 1
+        if 'CD' in N:
+            c[4] += 3
+            c[5] -= 1
+        if 'CM' in N:
+            c[4] += 8
+            c[6] -= 1
+        return np.sum(c*n).astype(int)
+
+    def min_rn(V):
+        thou = int(V/1000)
+        out = 'M'*thou
+        H = V-thou*1000
+        hund = int(H/100)
+        if hund == 4:
+            out += 'CD'
+        elif hund == 9:
+            out += 'CM'
+        elif hund >= 5:
+            out += 'D'+'C'*(hund-5)
+        else:
+            out += 'C'*hund
+        T = H-hund*100
+        tens = int(T/10)
+        if tens == 4:
+            out += 'XL'
+        elif tens == 9:
+            out += 'XC'
+        elif tens >= 5:
+            out += 'L'+'X'*(tens-5)
+        else:
+            out += 'X'*tens
+        ones = T-tens*10
+        if ones == 4:
+            out += 'IV'
+        elif ones == 9:
+            out += 'IX'
+        elif ones >= 5:
+            out += 'V'+'I'*(ones-5)
+        else:
+            out += 'I'*ones
+        return out
+        
+    nums = np.loadtxt('./aux/e89.dat',str)
+    ans = 0
+    for i in range(len(nums)):
+        p = parse(nums[i])
+        r = min_rn(p)
+        ans += len(nums[i])-len(r)
+    return ans
+
 if __name__ == '__main__':
     # EIGHTY ONE:
     st = time.time()
@@ -301,4 +371,8 @@ if __name__ == '__main__':
     # EIGHTY EIGHT:
     st = time.time()
     print(f'Problem 88: {euler88(12000)} ({time.time()-st} s)')
+
+    # EIGHTY NINE:
+    st = time.time()
+    print(f'Problem 89: {euler89()} ({time.time()-st} s)')
     
