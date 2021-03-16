@@ -4,26 +4,37 @@ import matplotlib.pyplot as plt
 import itertools
 import time
 
-# PROJECT EULER 90
-def euler90():
-    sqs = [(0,1), (0,4), (0,6), (1,6), (2,5), (3,6), (4,6), (8,1)]
-    ns = [0,1,2,3,4,5,6,7,8,6]
-    combs = list(itertools.combinations(ns,6))
-    count = 0
-    for i,c1 in enumerate(combs):
-        for c2 in combs[:i]:
-            fl = np.ones(len(sqs))
-            for n,sq in enumerate(sqs):
-                if (sq[0] in c1 and sq[1] in c2) or (sq[1] in c1 and sq[0] in c2):
-                    fl[n] = 0
-            if fl.sum() == 0:
-                count+=1
+# PROJECT EULER 94
+def euler94():
+    def iso_area(s1,s2):
+        h = np.sqrt(s1*s1 - (s2/2)*(s2/2))
+        return 0.5*h*s2
 
-    return count
-                
+    s1 = 1
+    out = 0
+    prev=1
+    while True:
+        s1 += 1
+        if 2*s1 + (s1-1) > 1.e9:
+            break
+        if np.sqrt(3*s1*s1 + 2*s1 - 1)%1 == 0:
+            out += int(2*s1) + int(s1 - 1)
+            if s1 < 1000:
+                s1*=3
+            else:
+                s1 = int(s1*3.73)
+        elif np.sqrt(3*s1*s1 - 2*s1 -1)%1 == 0:
+            out += int(2*s1) + int(s1 + 1)
+            if s1 < 1000:
+                s1*=3
+            else:
+                s1 = int(s1*3.73)
 
-print(euler90())
+    return out
 
+st = time.time()
+print(euler94())
+print(f'timed at {time.time()-st} s')
 
 
     

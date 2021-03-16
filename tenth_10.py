@@ -44,6 +44,100 @@ def euler92():
 
     return ans
 
+# PROJECT EULER 93
+def euler93():
+    def one_op(OP,D1,D2):
+        if OP == '+':
+            return D1+D2
+        if OP == '-':
+            return D1-D2
+        if op == '/':
+            return D1/D2
+        return D1*D2
+    
+    def get_tmv(i,OPS,DS):
+        if i == 0:
+            tmv = one_op(OPS[0],DS[0],DS[1])
+            tmv = one_op(OPS[1],tmv,DS[2])
+            return one_op(OPS[2],tmv,DS[3])
+            
+        if i == 1:
+            tmv = one_op(OPS[0],DS[1],DS[2])
+            tmv = one_op(OPS[1],DS[0],tmv)
+            return one_op(OPS[2],tmv,DS[3])
+
+        if i == 2:
+            tmv = one_op(OPS[0],DS[0],DS[1])
+            tm2 = one_op(OPS[2],DS[2],DS[3])
+            return one_op(OPS[1],tmv,tm2)
+
+        if i == 3:
+            tmv = one_op(OPS[1],DS[1],DS[2])
+            tmv = one_op(OPS[2],tmv,DS[3])
+            return one_op(OPS[0],DS[0],tmv)
+                
+                
+    
+    ops = list(itertools.combinations_with_replacement(['+','-','*','/'],3))
+    
+    digits = list(itertools.combinations([1,2,3,4,5,6,7,8,9],4))
+    mx = 0
+    for d in digits:
+        res = set([])
+        for dd in list(itertools.permutations(d)):
+            for op in ops:
+                for oopp in list(itertools.permutations(op)):
+                    for o in range(4):
+                        tmv = get_tmv(o,oopp,dd)
+                        if tmv > 0 and tmv%1 == 0: res.add(tmv)
+                        
+                        
+        cnt = 0
+        ind = 1
+        res = sorted(list(res))
+        
+        while True:
+            if res[ind] == res[ind-1]+1:
+                pass
+            else:
+                if res[ind-1] >= mx:
+                    ans = np.copy(d)
+                    mx = res[ind-1]
+                break
+            ind += 1
+
+    out = ''
+    for v in ans: out+=str(v)
+    return out
+
+# PROJECT EULER 94
+def euler94():
+    def iso_area(s1,s2):
+        h = np.sqrt(s1*s1 - (s2/2)*(s2/2))
+        return 0.5*h*s2
+
+    s1 = 1
+    out = 0
+    prev=1
+    while True:
+        s1 += 1
+        if 2*s1 + (s1-1) > 1.e9:
+            break
+        if np.sqrt(3*s1*s1 + 2*s1 - 1)%1 == 0:
+            out += int(2*s1) + int(s1 - 1)
+            if s1 < 1000:
+                s1*=3
+            else:
+                s1 = int(s1*3.73)
+        elif np.sqrt(3*s1*s1 - 2*s1 -1)%1 == 0:
+            out += int(2*s1) + int(s1 + 1)
+            if s1 < 1000:
+                s1*=3
+            else:
+                s1 = int(s1*3.73)
+
+    return out
+
 if __name__ == '__main__':
     # NINTY ONE:
     st = time.time()
@@ -52,3 +146,13 @@ if __name__ == '__main__':
     # NINTY TWO:
     st = time.time()
     print(f'Problem 92: {euler92()} ({time.time()-st} s)')
+    
+    # NINTY THREE:
+    st = time.time()
+    print(f'Problem 93: {euler93()} ({time.time()-st} s)')
+    
+    # NINTY FOUR:
+    st = time.time()
+    print(f'Problem 94: {euler94()} ({time.time()-st} s)')
+
+    
