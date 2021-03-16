@@ -112,13 +112,8 @@ def euler93():
 
 # PROJECT EULER 94
 def euler94():
-    def iso_area(s1,s2):
-        h = np.sqrt(s1*s1 - (s2/2)*(s2/2))
-        return 0.5*h*s2
-
     s1 = 1
     out = 0
-    prev=1
     while True:
         s1 += 1
         if 2*s1 + (s1-1) > 1.e9:
