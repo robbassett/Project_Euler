@@ -1,4 +1,4 @@
-export function erasthenes(n){
+function erasthenes(n){
     var sieve = Array.from({length:Math.floor(n/2)},i => i = 1)
     for (let i = 3; i < parseInt(Math.sqrt(n))+1; i += 2) {
         if (sieve[Math.floor(i/2)] == 1) {
@@ -16,7 +16,7 @@ export function erasthenes(n){
     return out
 }
 
-export function n_primes(n){
+function n_primes(n){
     var p = [2]
     var c = 2
     do {
@@ -30,3 +30,5 @@ export function n_primes(n){
     } while (p.length < n);
     return p
 }
+
+module.exports = {erasthenes, n_primes}
