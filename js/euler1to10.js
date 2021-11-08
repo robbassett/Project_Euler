@@ -18,6 +18,21 @@ function erasthenes(n){
     return out
 }
 
+function n_primes(n){
+    var p = [2]
+    var c = 2
+    do {
+        var j = 0
+        c += 1
+        do {
+            if (c % p[j] == 0) {break;}
+            if (j == p.length- 1) {p.push(c);}
+            j += 1
+        } while (j < p.length);
+    } while (p.length < n);
+    return p
+}
+
 function euler1(mx){
     var t0 = performance.now()
     var nums = []
@@ -95,8 +110,30 @@ function euler5(n){
     console.log('Euler #5: ' + ans + '  (' + (t1-t0) + ' ms)')
 }
 
+function euler6(n){
+    var t0 = performance.now()
+    var s1 = 0
+    var s2 = 0
+    for (let i = 1; i <= n; i++){
+        s1 += i*i
+        s2 += i
+    }
+    ans = s2*s2 - s1
+    var t1 = performance.now()
+    console.log('Euler #6: ' + ans + '  (' + (t1-t0) + ' ms)')
+}
+
+function euler7(n){
+    var t0 = performance.now()
+    ans = n_primes(n).pop()
+    var t1 = performance.now()
+    console.log('Euler #7: ' + ans + '  (' + (t1-t0) + ' ms)')
+}
+
 euler1(1000)
 euler2(4000000)
 euler3(600851475143)
 euler4(3)
 euler5(20)
+euler6(100)
+euler7(10001)
