@@ -113,6 +113,48 @@ function euler8(n){
     console.log('Euler #8: ' + ans + ' (' + (t1-t0) + ' ms)')
 }
 
+function euler9() {
+    var t0 = performance.now()
+    var m = 10
+    // get starting value of m such that triplet of m,m-1 > 1000
+    var tsum = 0
+    do {
+        var n = m-1
+        var trip = [m*m-n*n,2*m*n,m*m+n*n]
+        tsum = trip.reduce((psum,a) => psum + a, 0);
+        m++
+    } while (tsum < 1000)
+    m--
+    var n = m-1
+    var done = false
+    do {
+        tsum = 1001
+        do {
+            var trip = [m*m-n*n,2*m*n,m*m+n*n]
+            tsum = trip.reduce((psum,a) => psum + a, 0);
+            n-- 
+        } while (tsum > 1000)
+        if (tsum == 1000) {
+            m--
+            done = true
+        }
+        m++
+        n++
+    } while (done == false)
+    var trip = [m*m-n*n,2*m*n,m*m+n*n]
+    var ans = trip.reduce((pprod,a) => pprod*a, 1);
+    var t1 = performance.now()
+    console.log('Euler #9: ' + ans + ' (' + (t1-t0) + ' ms)')
+}
+
+function euler10(n) {
+    var t0 = performance.now()
+    var primes = utils.erasthenes(n)
+    var ans = primes.reduce((psum,a) => psum + a, 0);
+    var t1 = performance.now()
+    console.log('Euler #10: ' + ans + ' (' + (t1-t0) + ' ms)')
+}
+
 euler1(1000)
 euler2(4000000)
 euler3(600851475143)
@@ -121,3 +163,5 @@ euler5(20)
 euler6(100)
 euler7(10001)
 euler8(13)
+euler9()
+euler10(2000000)
