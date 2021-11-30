@@ -24,28 +24,16 @@ const euler11 = function() {
                     s3.push(d[i+k][j+k])
                 } else {s3.push(0)}
                 if (i > 3 && j < 17) {
-                    s4.push(d[i-k,j+k])
+                    s4.push(d[i-k][j+k])
                 }
             }
-            if (i == 4 && j == 0) {console.log(s4)}
             p1 = s1.reduce((psum,a) => psum * a, 1)
             p2 = s2.reduce((psum,a) => psum * a, 1)
             p3 = s3.reduce((psum,a) => psum * a, 1)
             p4 = s4.reduce((psum,a) => psum * a, 1)
-            if (p1 > mx) {
-                mx = p1
-                //console.log('s1',s1,mx)
-            }
-            if (p2 > mx) {
-                mx = p2
-                //console.log('s2',s2,mx)
-            }
-            if (p3 > mx) {
-                mx = p3
-                //console.log('s3',s3,mx)
-            }
-            if (p4 > mx) {
-                mx = p4
+            tmx = Math.max.apply(Math,[p1,p2,p3,p4])
+            if (tmx > mx){
+                mx = tmx
             }
         }
     }
@@ -53,4 +41,19 @@ const euler11 = function() {
     console.log('Euler #11: ' + mx + ' (' + (t1-t0) + ' ms)')
 }
 
+const euler12 = function(n) {
+    const t0 = performance.now()
+    var val = 1
+    var cn = 1
+    var facts = []
+    do {
+        cn ++
+        val += cn
+        facts = utils.get_factors(val)
+    } while (facts.length < n);
+    const t1 = performance.now()
+    console.log('Euler #12: ' + val + ' (' + (t1-t0) + ' ms)')
+}
+
 euler11()
+euler12(500)

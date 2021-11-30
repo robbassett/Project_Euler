@@ -31,4 +31,20 @@ function n_primes(n){
     return p
 }
 
-module.exports = {erasthenes, n_primes}
+function get_factors(n){
+    var factors = []
+    for (i = 0; i <= parseInt(Math.sqrt(n)); i++){
+        if (n % (i+1) == 0) {
+            if (!(factors.includes(i+1))) {
+                factors.push(i+1)
+            }
+            var tm = parseInt(n/(i+1))
+            if (!(factors.includes(tm))) {
+                factors.push(tm)
+            }
+        }
+    }
+    return factors
+}
+
+module.exports = {erasthenes, n_primes, get_factors}
