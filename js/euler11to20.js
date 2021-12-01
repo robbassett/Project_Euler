@@ -55,5 +55,13 @@ const euler12 = function(n) {
     console.log('Euler #12: ' + val + ' (' + (t1-t0) + ' ms)')
 }
 
+const euler13 = function() {
+    const t0 = performance.now()
+    ans = String(data.euler13.reduce((a,b) => a + b, 0)).replace('.','').substring(0,10)
+    const t1 = performance.now()
+    console.log('Euler #13: ' + ans + ' (' + (t1-t0) + ' ms)')
+}
+
 euler11()
 euler12(500)
+euler13()
