@@ -62,6 +62,46 @@ const euler13 = function() {
     console.log('Euler #13: ' + ans + ' (' + (t1-t0) + ' ms)')
 }
 
+const euler14 = function() {
+    const t0 = performance.now()
+    var maxlen = 1
+    var ans = 0
+    for (let curr = 13; curr <= 1e6; curr++){
+        var clen = 1
+        var n = curr
+        do {
+            if (n%2 == 0) {
+                n = n/2
+            } else { n = 3*n + 1 }
+            clen++
+        } while (n > 1);
+        if (clen > maxlen) {
+            maxlen = clen
+            ans = curr
+        }
+    }
+    const t1 = performance.now()
+    console.log('Euler #14: ' + ans + ' (' + (t1-t0) + ' ms)')
+}
+
+const euler15 = function(N) {
+    const t0 = performance.now();
+    var row = [1,2];
+    var prev = [...row]
+    do {
+        row = Array(row.length+1).fill(1)
+        for (let i = 1; i < prev.length; i++){
+            row[i] = row[i-1] + prev[i]
+        }
+        row[prev.length] = 2*row[prev.length-1]
+        prev = [...row]
+    } while (row.length < N+1);
+    const t1 = performance.now();
+    console.log('Euler #15: ' + row[row.length-1] + ' (' + (t1-t0) + ' ms)')
+}
+
 euler11()
 euler12(500)
 euler13()
+euler14()
+euler15(20)
