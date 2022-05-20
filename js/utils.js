@@ -47,4 +47,12 @@ function get_factors(n){
     return factors
 }
 
-module.exports = {erasthenes, n_primes, get_factors}
+function bigFactorial(n){
+    var out = 1
+    for (let i = 2; i <= n; i ++){
+        out = BigInt(out)*BigInt(i)
+    }
+    return out
+}
+
+module.exports = {erasthenes, n_primes, get_factors, bigFactorial}

@@ -178,6 +178,7 @@ def euler18(ff):
     tri = load_triangle(ff)
     prev = tri[-1]
     for i in range(len(tri)-2,-1,-1):
+        print(prev)
         cur = tri[i]
         aug = [0 for j in range(len(cur))]
         for j,v in enumerate(cur):
@@ -210,6 +211,7 @@ def euler20(N):
                 
 if __name__ == '__main__':
     # ELEVEN
+    """
     st = time.time()
     print(f'Problem 11: {euler11()} ({time.time()-st} s)')
     
@@ -236,7 +238,7 @@ if __name__ == '__main__':
     # SEVENTEEN
     st = time.time()
     print(f'Problem 17: {euler17(1000)} ({time.time()-st} s)')
-
+    """
     # EIGHTEEN
     st = time.time()
     f = 'dat/e18.dat'
