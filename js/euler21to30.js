@@ -36,6 +36,7 @@ const euler22 = function() {
     console.log('Euler #22: ' + ans + ' (' + (t1-t0) + ' ms)')
 }
 
+// This one is slow ~31 seconds
 const euler23 = function() {
     t0 = performance.now();
     var abund_nums = [];
@@ -58,6 +59,15 @@ const euler23 = function() {
     console.log('Euler #23: ' + ans + ' (' + (t1-t0) + ' ms)')
 }
 
+const euler24 = function() {
+    t0 = performance.now();
+    var a = [0,1,2,3,4,5,6,7,8,9];
+    hg = utils.heaps(a).sort();
+    t1 = performance.now();
+    console.log('Euler #24: ' + hg[999999] + ' (' + (t1-t0) + ' ms)')
+}
+
 euler21()
 euler22()
-euler23()
+//euler23()
+euler24()

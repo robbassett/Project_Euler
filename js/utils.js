@@ -55,4 +55,33 @@ function bigFactorial(n){
     return out
 }
 
-module.exports = {erasthenes, n_primes, get_factors, bigFactorial}
+function * heaps_gen(k,a) {
+    if (k == 1) {
+        yield a
+    };
+    for (let i = 0; i < k; i++) {
+        yield * heaps_gen(k-1,a)
+        var b = a[k-1]
+        if (k % 2 == 1) {
+            a[k-1] = a[0]
+            a[0] = b
+        } else {
+            a[k-1] = a[i]
+            a[i] = b
+        }
+    }
+    
+}
+
+function heaps(a) {
+    var g = heaps_gen(a.length,a)
+    var output = []
+    for (let perm of g) {
+        var _p = ''
+        for (let v of perm) {_p += String(v)}
+        output.push(_p)
+    }
+    return output
+}
+
+module.exports = {erasthenes, n_primes, get_factors, bigFactorial, heaps, heaps_gen}
