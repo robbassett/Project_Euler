@@ -67,7 +67,57 @@ const euler24 = function() {
     console.log('Euler #24: ' + hg[999999] + ' (' + (t1-t0) + ' ms)')
 }
 
-euler21()
-euler22()
-//euler23()
-euler24()
+const euler25 = function(ndigit) {
+    t0 = performance.now();
+    var f1 = 1
+    var f2 = 1
+    var c = 2
+    do {
+        var f3 = f1
+        f1 = f2
+        f2 = BigInt(f3) + BigInt(f2)
+        c += 1
+    } while (String(f2).length < ndigit)
+    t1 = performance.now();
+    console.log('Euler #25: ' + c + ' (' + (t1-t0) + ' ms)')
+}
+
+const euler26 = function() {
+    t0 = performance.now()
+    var ans = 0
+    var mx = 0
+    for (let i = 2; i < 1000; i++){
+        var t = 1
+        var done = false
+        var rl = 0
+        var digits = []
+        do {
+            var r = t % i
+            if (r == 0) {
+                rl = 0
+                done = true
+            } else {
+                if (!digits.includes(r)) {
+                    digits.push(r)
+                    t = 10*r
+                } else {
+                    done = true
+                    rl = digits.length
+                }
+            }
+        } while (!done)
+        if (rl > mx) {
+            mx = rl
+            ans = i
+        }
+    }
+    t1 = performance.now()
+    console.log('Euler #26: ' + ans + ' (' + (t1-t0) + ' ms)')
+}
+
+// euler21()
+// euler22()
+// euler23()
+// euler24()
+euler25(1000)
+euler26()
