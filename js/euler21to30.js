@@ -115,9 +115,56 @@ const euler26 = function() {
     console.log('Euler #26: ' + ans + ' (' + (t1-t0) + ' ms)')
 }
 
+const euler27 = function() {
+    t0 = performance.now()
+    var cprimes = utils.erasthenes(100000)
+    var bprimes = utils.erasthenes(1000)
+    var a0 = 0
+    var b0 = 0
+    var mx = 0
+    for (let a = -1000; a <= 1000; a++) {
+        for (b of bprimes) {
+            var n = 0
+            var done = false 
+            do {
+                n++
+                if (!cprimes.includes(n*n + a*n + b)) {
+                    done = true
+                }
+            } while (!done)
+            if (n >= mx) {
+                mx = n
+                a0 = a
+                b0 = b
+            }
+        }
+    }
+    ans = a0*b0
+    t1 = performance.now()
+    console.log('Euler #27: ' + ans + ' (' + (t1-t0) + ' ms)')
+}
+
+const euler28 = function(side) {
+    t0 = performance.now()
+    var ans = 1
+    var step = 2
+    var cv = 1
+    while (step <= side) {
+        for (let i = 0; i < 4; i++) {
+            cv += step
+            ans += cv
+        }
+        step += 2
+    }
+    t1 = performance.now()
+    console.log('Euler #28: ' + ans + ' (' + (t1-t0) + ' ms)')
+}
+
 // euler21()
 // euler22()
 // euler23()
 // euler24()
 euler25(1000)
 euler26()
+//euler27()
+euler28(1001)
