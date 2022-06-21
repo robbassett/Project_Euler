@@ -160,6 +160,35 @@ const euler28 = function(side) {
     console.log('Euler #28: ' + ans + ' (' + (t1-t0) + ' ms)')
 }
 
+const euler29 = function() {
+    t0 = performance.now()
+    var arr_out = []
+    for (let a = 2; a <= 100; a++) {
+        for (let b = 2; b <= 100; b++) {
+            arr_out.push(a**b)
+        }
+    }
+    ans = [ ... new Set(arr_out)].length
+    t1 = performance.now()
+    console.log('Euler #29: ' + ans + ' (' + (t1-t0) + ' ms)')
+}
+
+const euler30 = function(n) {
+    var vals = []
+    for (let i = 10**(n-2); i < 10**(n+1); i++) {
+        var tsum = 0
+        for (var v of String(i)) {
+            tsum += parseInt(v)**n
+        }
+        if (tsum == i) {
+            vals.push(i)
+        }
+    }
+    ans = vals.reduce((p,a) => p + a, 0)
+    t1 = performance.now()
+    console.log('Euler #30: ' + ans + ' (' + (t1-t0) + ' ms)')
+}
+
 // euler21()
 // euler22()
 // euler23()
@@ -168,3 +197,5 @@ euler25(1000)
 euler26()
 //euler27()
 euler28(1001)
+euler29()
+euler30(5)
