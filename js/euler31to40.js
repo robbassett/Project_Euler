@@ -76,6 +76,48 @@ const euler33 = function() {
     console.log('Euler #33: ' + ans + ' (' + (t1-t0) + ' ms)')
 }
 
+const euler34 = function() {
+    t0 = performance.now();
+    var done = false
+    var ans = 0
+    var i = 2
+    do {
+        i ++
+        var tsum = 0
+        for (v of Array.from(String(i))) {
+            tsum += utils.factorial(parseInt(v))
+        }
+        if (tsum == i) {
+            ans += i
+        }
+        if (i > 100000) { done = true}
+    } while (!done)
+    t1 = performance.now();
+    console.log('Euler #34: ' + ans + ' (' + (t1-t0) + ' ms)')
+}
+
+const euler35 = function(n) {
+    t0 = performance.now();
+    var ans = 0;
+    const primes = utils.erasthenes(n);
+    for (v of primes) {
+        var fl = true
+        for (_v of utils.rotate_digits(v).slice(1)) {
+            if (!primes.includes(_v)) {
+                fl = false
+                break
+            }
+        }
+        if (fl) {
+            ans += 1
+        }
+    }
+    t1 = performance.now();
+    console.log('Euler #35: ' + ans + ' (' + (t1-t0) + ' ms)')
+}
+
 euler31(200)
 euler32()
 euler33()
+euler34()
+euler35(1000000)

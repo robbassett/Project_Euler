@@ -55,6 +55,15 @@ function bigFactorial(n){
     return out
 }
 
+function factorial(n) {
+    var f = [];
+    if (n == 0 || n == 1)
+        return 1;
+    if (f[n] > 0)
+        return f[n];
+    return f[n] = factorial(n-1) * n;
+}
+
 function * heaps_gen(k,a) {
     if (k == 1) {
         yield a
@@ -84,4 +93,14 @@ function heaps(a) {
     return output
 }
 
-module.exports = {erasthenes, n_primes, get_factors, bigFactorial, heaps, heaps_gen}
+function rotate_digits(x) {
+    var out = [x]
+    var tm = String(x)
+    for (let i = 0; i < String(x).length-1; i++) {
+        out.push(parseInt(tm.slice(1)+tm[0]))
+        tm = tm.slice(1)+tm[0]
+    }
+    return out
+}
+
+module.exports = {erasthenes, n_primes, get_factors, bigFactorial, heaps, heaps_gen, factorial, rotate_digits}
