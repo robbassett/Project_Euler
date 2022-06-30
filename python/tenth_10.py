@@ -133,21 +133,53 @@ def euler94():
 
     return out
 
+def euler95():
+    def next_num(_x):
+        return np.array(get_factors(_x)).sum()-_x
+
+    def make_chain(_cv):
+        chain = [_cv]
+        tv = _cv
+        while True:
+            tv = next_num(tv)
+            if tv in chain or tv > 1.e6:
+                chain.append(tv)
+                break
+            chain.append(tv)
+        return chain
+
+    mx = 0
+    cv = 219
+    while True:
+        if cv > 1e6 or mx > 7: break
+        cv += 1
+        tchain = make_chain(cv)
+        if tchain[0] == tchain[-1]:
+            if len(tchain) > mx:
+                mx = len(tchain)
+                ans = min(tchain)
+    return ans
+
+        
+
+
 if __name__ == '__main__':
     # NINTY ONE:
     st = time.time()
-    print(f'Problem 91: {euler91(50)} ({time.time()-st} s)')
+    #print(f'Problem 91: {euler91(50)} ({time.time()-st} s)')
     
     # NINTY TWO:
     st = time.time()
-    print(f'Problem 92: {euler92()} ({time.time()-st} s)')
+    #print(f'Problem 92: {euler92()} ({time.time()-st} s)')
     
     # NINTY THREE:
     st = time.time()
-    print(f'Problem 93: {euler93()} ({time.time()-st} s)')
+    #print(f'Problem 93: {euler93()} ({time.time()-st} s)')
     
     # NINTY FOUR:
     st = time.time()
-    print(f'Problem 94: {euler94()} ({time.time()-st} s)')
+    #print(f'Problem 94: {euler94()} ({time.time()-st} s)')
 
-    
+    # NINTY FIVE:
+    st = time.time()
+    print(f'Problem 95: {euler95()} ({time.time()-st} s)')

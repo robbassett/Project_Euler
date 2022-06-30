@@ -11,11 +11,14 @@ def euler31(total):
     for v in range(combs.shape[0]):
         target = v+1
         for i,c in enumerate(coins):
+            ind = target-c-1
+            if ind < 0: ind += len(combs)
             if i == 0: combs[v][i] = 1
             elif c <= target:
-                combs[v][i] = combs[v][i-1] + combs[target - c - 1][i]
+                combs[v][i] = combs[v][i-1] + combs[ind][i]
             else:
                 combs[v][i] = combs[v][i-1]
+        print(target,combs[v])
     return int(combs[-1][-1])
 
 # PROJECT EULER 32

@@ -162,6 +162,7 @@ def euler30(P):
 
 if __name__ == '__main__':
     # TWENTY ONE:
+    """
     st = time.time()
     print(f'Problem 21: {euler21(10000)} ({time.time()-st} s)')
     
@@ -180,7 +181,7 @@ if __name__ == '__main__':
     # TWENTY FIVE:
     st = time.time()
     print(f'Problem 25: {euler25(1000)} ({time.time()-st} s)')
-    
+    """
     # TWENTY SIX:
     st = time.time()
     print(f'Problem 26: {euler26(1000)} ({time.time()-st} s)')
