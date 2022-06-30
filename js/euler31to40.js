@@ -62,10 +62,6 @@ const euler33 = function() {
                     var nn = parseInt(String(n).replace(re,''))
                     var dd = parseInt(String(d).replace(re,''))
                     if (n/d == nn/dd) {
-                        if (nn != 1 & (dd/nn) % 1 == 0) {
-                            dd /= nn
-                            nn = 1
-                        }
                         np *= nn
                         dp *= dd
                     }
