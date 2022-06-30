@@ -48,5 +48,38 @@ const euler32 = function() {
     console.log('Euler #32: ' + ans + ' (' + (t1-t0) + ' ms)')
 }
 
+const euler33 = function() {
+    t0 = performance.now();
+    var np = 1
+    var dp = 1
+    for (let d = 11; d < 100; d++) {
+        for (let n = 10; n < d; n++) {
+            if (String(n)[0] == String(n)[1] | String(d)[0] == String(d)[1]) { continue }
+            if (String(n)[1] == 0 & String(d)[1] == 0) { continue }
+            for (var v of String(n)) {
+                if (String(d).includes(v)) {
+                    var re = new RegExp(v,'g')
+                    var nn = parseInt(String(n).replace(re,''))
+                    var dd = parseInt(String(d).replace(re,''))
+                    if (n/d == nn/dd) {
+                        if (nn != 1 & (dd/nn) % 1 == 0) {
+                            dd /= nn
+                            nn = 1
+                        }
+                        np *= nn
+                        dp *= dd
+                    }
+                }
+            }
+        }
+    }
+    if (np != 1 & (dp/np) % 1 == 0) {
+        ans = dp/np
+    } else { ans = dp }
+    t1 = performance.now();
+    console.log('Euler #33: ' + ans + ' (' + (t1-t0) + ' ms)')
+}
+
 euler31(200)
 euler32()
+euler33()
