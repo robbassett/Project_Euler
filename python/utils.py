@@ -93,10 +93,13 @@ def gcf(n1,n2):
 
 class sudoku():
 
-    def __init__(self,gridlines):
+    def __init__(self,gridlines,i):
         self.input = gridlines
+        self.seeds = []
+        self.i = 0 if i != 43 else -1
+        self.tangent = False
         self.make_grid()
-        self.possibles = {}
+        self.possibles = {'pair':{},'triple':{}}
         self.check_set = set([0,1,2,3,4,5,6,7,8,9])
         self.unsolved = np.where(self.grid == 0)
 
@@ -126,8 +129,17 @@ class sudoku():
             line = line.replace('\n','')
             for col,val in enumerate(line):
                 self.grid[row,col] = val
+        for seed in self.seeds:
+            self.grid[seed[0],seed[1]] = seed[2]
 
-    def get_hidden_pairs(self,r,c):
+    def check_mistake(self):
+        for r,c in zip(*self.unsolved):
+            tm = len(self.get_cell_possibles(r,c))
+            if tm == 0:
+                return True
+        return False
+
+    def get_hidden_pairs(self,r,c,pot='pair'):
         def check_relevant(kr,kc,r,c):
             if kr//3 == r//3 and kc//3 == c//3:
                 return True
@@ -137,16 +149,24 @@ class sudoku():
 
         hidden = []
         tst = []
-        for k,i in self.possibles.items():
+        for k,i in self.possibles[pot].items():
             if f'{r},{c}' == k: continue
             kr,kc = int(k.split(',')[0]),int(k.split(',')[1])
             if check_relevant(kr,kc,r,c):
-                for _k,_i in self.possibles.items():
+                for _k,_i in self.possibles[pot].items():
                     if f'{r},{c}' == _k or k == _k or i != _i: continue
                     _kr,_kc = int(_k.split(',')[0]),int(_k.split(',')[1])
                     if check_relevant(_kr,_kc,kr,kc) and check_relevant(_kr,_kc,r,c):
-                        hidden.append(i)
-                        tst.append([kr,kc,_kr,_kc])
+                        if pot == 'pair':
+                            hidden.append(i)
+                            tst.append([kr,kc,_kr,_kc])
+                        else:
+                            for k_,i_ in self.possibles[pot].items():
+                                if f'{r},{c}' == k_ or k == k_ or _k == k_ or i != i_: continue
+                                kr_,kc_ = int(k_.split(',')[0]),int(k_.split(',')[1])
+                                if check_relevant(kr_,kc_,kr,kc) and check_relevant(kr_,kc_,r,c) and check_relevant(kr_,kc_,_kr,_kc):
+                                    hidden.append(i)
+                                    tst.append([kr,kc,_kr,_kc,kr_,kc_])
 
         return hidden,tst
 
@@ -165,23 +185,30 @@ class sudoku():
 
     def init_check(self,r,c,incl_hidden=False):
         val = list(self.get_cell_possibles(r,c))
-        if incl_hidden and len(val) == 3:
-            hp,tst = self.get_hidden_pairs(r,c)
+        if incl_hidden and len(val) in [3,4]:
+            pot = 'pair' if len(val) == 3 else 'triple'
+            hp,tst = self.get_hidden_pairs(r,c,pot)
             for hidden,ttt in zip(hp,tst):
                 tval = list(set(val).difference(set(hidden)))
                 if len(tval) == 1:
                     self.grid[r,c] = tval[0]
-                    if f'{r},{c}' in self.possibles.keys():
-                        del self.possibles[f'{r},{c}']
+                    if f'{r},{c}' in self.possibles['pair'].keys():
+                        del self.possibles['pair'][f'{r},{c}']
+                    if f'{r},{c}' in self.possibles['triple'].keys():
+                        del self.possibles['triple'][f'{r},{c}']
                     return
 
         if len(val) == 1:
             self.grid[r,c] = val[0]
-            if f'{r},{c}' in self.possibles.keys():
-                del self.possibles[f'{r},{c}']
+            if f'{r},{c}' in self.possibles['pair'].keys():
+                del self.possibles['pair'][f'{r},{c}']
+            if f'{r},{c}' in self.possibles['triple'].keys():
+                del self.possibles['triple'][f'{r},{c}']
         else:
             if len(val) == 2:
-                self.possibles[f'{r},{c}'] = val
+                self.possibles['pair'][f'{r},{c}'] = val
+            if len(val) == 3:
+                self.possibles['triple'][f'{r},{c}'] = val
             
 
     def solve_iter(self,hidden=False):
@@ -189,7 +216,7 @@ class sudoku():
             self.init_check(r,c,incl_hidden=hidden)
         self.unsolved = np.where(self.grid == 0)
         
-    def solve(self):
+    def solve_test(self):
         while len(self.unsolved[0]) > 0:
             pgrid = self.grid.copy()
             self.solve_iter(hidden=True)
@@ -197,5 +224,64 @@ class sudoku():
             for _ in (pgrid == self.grid): ch.append(all(_))
             if all(ch):
                 break
-        self.to_terminal()
+
+    def pair_test(self):
+        skips = []
+        while True:
+            if len(skips) == len(self.possibles['pair']):
+                r,c = int(skips[self.i].split(',')[0]),int(skips[self.i].split(',')[1])
+                self.seeds.append([r,c,self.possibles['pair'][skips[self.i]][0]])
+                self.tangent = True
+                self.alt = [r,c,self.possibles['pair'][skips[self.i]][1]]
+                self.make_grid()
+                self.possibles = {'pair':{},'triple':{}}
+                self.unsolved = np.where(self.grid == 0)
+                return
+            for k,i in self.possibles['pair'].items():
+                if k not in skips: 
+                    break
+                
+            skips.append(k)
+            r,c = int(k.split(',')[0]),int(k.split(',')[1])
+            self.grid[r,c] = i[0]
+            self.unsolved = np.where(self.grid == 0)
+            self.solve_test()
+            if self.check_mistake():
+                self.seeds.append([r,c,i[1]])
+                self.make_grid()
+                self.possibles = {'pair':{},'triple':{}}
+                self.unsolved = np.where(self.grid == 0)
+                return
+
+            self.make_grid()
+            self.possibles = {'pair':{},'triple':{}}
+            self.solve_test()
+            self.grid[r,c] = i[1]
+            self.unsolved = np.where(self.grid == 0)
+            self.solve_test()
+            if self.check_mistake():
+                self.seeds.append([r,c,i[0]])
+                self.make_grid()
+                self.possibles = {'pair':{},'triple':{}}
+                self.unsolved = np.where(self.grid == 0)
+                return
+
+            self.make_grid()
+            self.possibles = {'pair':{},'triple':{}}
+            self.unsolved = np.where(self.grid == 0)
+            self.solve_test()
+
+    def solve(self):
+        while True:
+            self.solve_test()
+            if self.tangent and self.check_mistake():
+                self.seeds = [self.alt]
+                self.make_grid()
+                self.unsolved = np.where(self.grid == 0)
+                continue
+
+            if len(self.unsolved[0]) > 0:
+                self.pair_test()
+            else:
+                break
             

@@ -160,28 +160,39 @@ def euler95():
                 ans = min(tchain)
     return ans
 
-d = open('dat/e96.dat','r').readlines()
-x = d[31:40]
-t = sudoku(x)
+def euler96():
+    d = open('dat/e96.dat','r').readlines()
+    ans = 0
+    for i in range(50):
+        t=sudoku(d[i*10+1:(i+1)*10],i)
+        t.solve()
+        tm = ''
+        for _ in t.grid[0][:3]: tm+=str(int(_))
+        ans+=int(tm)
+    return ans
+
 
 if __name__ == '__main__':
     # NINTY ONE:
-    # st = time.time()
-    # print(f'Problem 91: {euler91(50)} ({time.time()-st} s)')
+    st = time.time()
+    print(f'Problem 91: {euler91(50)} ({time.time()-st} s)')
     
-    # # NINTY TWO:
-    # st = time.time()
-    # print(f'Problem 92: {euler92()} ({time.time()-st} s)')
+    # NINTY TWO:
+    st = time.time()
+    print(f'Problem 92: {euler92()} ({time.time()-st} s)')
     
-    # # NINTY THREE:
-    # st = time.time()
-    # print(f'Problem 93: {euler93()} ({time.time()-st} s)')
+    # NINTY THREE:
+    st = time.time()
+    print(f'Problem 93: {euler93()} ({time.time()-st} s)')
     
-    # # NINTY FOUR:
-    # st = time.time()
-    # print(f'Problem 94: {euler94()} ({time.time()-st} s)')
+    # NINTY FOUR:
+    st = time.time()
+    print(f'Problem 94: {euler94()} ({time.time()-st} s)')
 
-    # # NINTY FIVE:
-    # st = time.time()
-    # print(f'Problem 95: {euler95()} ({time.time()-st} s)')
-    pass
+    # NINTY FIVE:
+    st = time.time()
+    print(f'Problem 95: {euler95()} ({time.time()-st} s)')
+    
+    # NINTY SIX:
+    st = time.time()
+    print(f'Problem 96: {euler96()} ({time.time()-st} s)')
