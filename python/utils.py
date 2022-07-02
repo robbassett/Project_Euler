@@ -1,5 +1,6 @@
 import numpy as np
 import itertools
+import copy
 
 def char_position(letter):
     if letter.islower():
@@ -86,3 +87,115 @@ def get_factors(n,excl_N=False):
                 else:
                     fcts.append(int(n/(i+1)))
     return fcts
+
+def gcf(n1,n2):
+    return max(set(get_factors(n1)).intersection(set(get_factors(n2))))
+
+class sudoku():
+
+    def __init__(self,gridlines):
+        self.input = gridlines
+        self.make_grid()
+        self.possibles = {}
+        self.check_set = set([0,1,2,3,4,5,6,7,8,9])
+        self.unsolved = np.where(self.grid == 0)
+
+    def to_terminal(self):
+        print('-'*31)
+        r = 0
+        for row in self.grid:
+            tr = '|'
+            c = 0
+            for v in row:
+                c+=1
+                if c == 4:
+                    c=1
+                    tr+='|'
+                tr+=' '+str(int(v))+' '
+            r+=1
+            if r == 4:
+                print('-'*31)
+                r = 1
+            tr += '|'
+            print(tr)
+        print('-'*31)
+
+    def make_grid(self):
+        self.grid = np.empty((9,9))
+        for row,line in enumerate(self.input):
+            line = line.replace('\n','')
+            for col,val in enumerate(line):
+                self.grid[row,col] = val
+
+    def get_hidden_pairs(self,r,c):
+        def check_relevant(kr,kc,r,c):
+            if kr//3 == r//3 and kc//3 == c//3:
+                return True
+            if kr == r or kc == c:
+                return True
+            return False
+
+        hidden = []
+        tst = []
+        for k,i in self.possibles.items():
+            if f'{r},{c}' == k: continue
+            kr,kc = int(k.split(',')[0]),int(k.split(',')[1])
+            if check_relevant(kr,kc,r,c):
+                for _k,_i in self.possibles.items():
+                    if f'{r},{c}' == _k or k == _k or i != _i: continue
+                    _kr,_kc = int(_k.split(',')[0]),int(_k.split(',')[1])
+                    if check_relevant(_kr,_kc,kr,kc) and check_relevant(_kr,_kc,r,c):
+                        hidden.append(i)
+                        tst.append([kr,kc,_kr,_kc])
+
+        return hidden,tst
+
+    def get_cell_possibles(self,r,c):
+        qr,qc = r//3,c//3
+        sq = []
+        for row in self.grid[3*qr:3*(qr+1)]:
+            sq += list(row[3*qc:3*(qc+1)])
+        sq = set(sq)
+        row = set(self.grid[r])
+        col = set(self.grid.T[c])
+
+        excl = sq.union(row).union(col)
+
+        return self.check_set.difference(excl)
+
+    def init_check(self,r,c,incl_hidden=False):
+        val = list(self.get_cell_possibles(r,c))
+        if incl_hidden and len(val) == 3:
+            hp,tst = self.get_hidden_pairs(r,c)
+            for hidden,ttt in zip(hp,tst):
+                tval = list(set(val).difference(set(hidden)))
+                if len(tval) == 1:
+                    self.grid[r,c] = tval[0]
+                    if f'{r},{c}' in self.possibles.keys():
+                        del self.possibles[f'{r},{c}']
+                    return
+
+        if len(val) == 1:
+            self.grid[r,c] = val[0]
+            if f'{r},{c}' in self.possibles.keys():
+                del self.possibles[f'{r},{c}']
+        else:
+            if len(val) == 2:
+                self.possibles[f'{r},{c}'] = val
+            
+
+    def solve_iter(self,hidden=False):
+        for r,c in zip(*self.unsolved):
+            self.init_check(r,c,incl_hidden=hidden)
+        self.unsolved = np.where(self.grid == 0)
+        
+    def solve(self):
+        while len(self.unsolved[0]) > 0:
+            pgrid = self.grid.copy()
+            self.solve_iter(hidden=True)
+            ch = []
+            for _ in (pgrid == self.grid): ch.append(all(_))
+            if all(ch):
+                break
+        self.to_terminal()
+            
