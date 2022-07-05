@@ -171,6 +171,86 @@ def euler96():
         ans+=int(tm)
     return ans
 
+def euler97():
+    c = 2
+    for i in range(7830456):
+        c*=2
+        if len(str(c)) > 10:
+            c = int(str(c)[-10:])
+    ans = c * 28433 + 1
+    return str(int(ans))[-10:]
+
+def euler98():
+    def check(ws,n):
+        wd = {}
+        used_nums = []
+        for wl,nl in zip(ws[0],str(n)):
+            if wl not in wd.keys():
+                if nl in used_nums:
+                    return False
+                wd[wl] = nl
+                used_nums.append(nl)
+            else:
+                if wd[wl] != nl:
+                    return False
+
+        cnum = ''
+        for wl in ws[1]:
+            cnum += wd[wl]
+            if cnum == '0':
+                return False
+        if np.sqrt(float(cnum))%1 == 0:
+            return max(n,int(cnum))
+        return False
+
+    d = open('dat/e98.dat','r').readline()
+    words = np.array([_.replace('"','') for _ in d.split(',')])
+    lengths = np.array([len(w) for w in words])
+    anagrams = []
+    for w,l in zip(words,lengths):
+        t = np.where(lengths == l)[0]
+        for _w in words[t]:
+            if w == _w or [_w,w] in anagrams: continue
+            if sorted(w) == sorted(_w):
+                anagrams.append([w,_w])
+
+    ps = {}
+    i = 1
+    while True:
+        tm = i*i
+        k = len(str(tm))
+        if k > 9: break
+        if k not in ps:
+            ps[k] = [tm]
+        else:
+            ps[k].append(tm)
+        i+=1
+
+    ans = 0
+    for a in anagrams:
+        for s in ps[len(a[0])]:
+            c = check(a,s)
+            if c:
+                if c > ans:
+                    ans  = c
+    return ans
+
+def euler99():
+    mx = 0
+    for i,l in enumerate(open('dat/e99.dat','r').readlines()):
+        v1,v2 = [int(_) for _ in l.split(',')]
+        tv = v2*np.log10(v1)
+        if tv > mx:
+            mx = tv
+            ans = i+1
+    return ans
+
+def euler100():
+    b,n = 15,21
+    while n < 1.e12:
+        b,n = (3*b) + (2*n) - 2,(4*b) + (3*n) - 3
+    return b
+
 
 if __name__ == '__main__':
     # NINTY ONE:
@@ -196,3 +276,19 @@ if __name__ == '__main__':
     # NINTY SIX:
     st = time.time()
     print(f'Problem 96: {euler96()} ({time.time()-st} s)')
+    
+    # NINTY SEVEN:
+    st = time.time()
+    print(f'Problem 97: {euler97()} ({time.time()-st} s)')
+
+    # NINTY EIGHT:
+    st = time.time()
+    print(f'Problem 98: {euler98()} ({time.time()-st} s)')
+    
+    # NINTY NINE:
+    st = time.time()
+    print(f'Problem 99: {euler99()} ({time.time()-st} s)')
+
+    # ONE HUNDRED:
+    st = time.time()
+    print(f'Problem 100: {euler100()} ({time.time()-st} s)')
