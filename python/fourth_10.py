@@ -18,7 +18,6 @@ def euler31(total):
                 combs[v][i] = combs[v][i-1] + combs[ind][i]
             else:
                 combs[v][i] = combs[v][i-1]
-        print(target,combs[v])
     return int(combs[-1][-1])
 
 # PROJECT EULER 32
