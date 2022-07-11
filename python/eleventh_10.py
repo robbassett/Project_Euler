@@ -2,27 +2,6 @@ import numpy as np
 import utils
 import time
 
-def get_possibles(seq,i=0,opts=[],mxrng=3):
-    used = [a+b for a,b in zip(seq,opts)]
-    out,new = [],[]
-    rng = (-mxrng,mxrng)
-    for r in range(rng[0],rng[1]+1):
-        if seq[i]+r in used or seq[i]+r <= 0: continue
-        out.append(r)
-
-        if i < len(seq)-1:
-            tm,tn = get_possibles(seq,i+1,opts+[r])
-            if i < len(seq)-2:
-                new += tn
-            else:
-                t1 = opts+[r]
-                for v in tm:
-                    topts = t1 + [v]
-                    vals = [a+b for a,b in zip(topts,seq)]
-                    new.append(vals)
-
-    return out,new
-
 def euler101(k):
     def lagrange(x,y):
         p = np.poly1d(0)
@@ -99,62 +78,30 @@ def euler102():
         ):
             ans += 1
     return ans
- 
+
 def euler103(n=7):
-    def check_special(s):
-        if len(s) < 3: return True
-        for n in range(2,len(s)):
-            for _x in utils.itertools.permutations(s,n):
-                _z = set(s).difference(set(_x))
-                if sum(_x) in _z: 
-                    return False
-                for _n in range(1,len(_z)+1):
-                    for _y in utils.itertools.permutations(_z,_n):
-                        SB,SC = [sum(_x),sum(_y)] if len(_x) > len(_y) else [sum(_y),sum(_x)]
-                        sbc = SB < SC if len(_x) != len(_y) else False
-                        if sum(_x) == sum(_y) or sbc:
-                            return False
-        return True
+    def get_possibles(seq,i=0,opts=[],mxrng=3):
+        used = [a+b for a,b in zip(seq,opts)]
+        out,new = [],[]
+        rtop = mxrng if sum(opts) < -mxrng else abs(sum(opts)+1)
+        rng = (-mxrng,rtop)
+        for r in range(rng[0],rng[1]+1):
+            if seq[i]+r in used or seq[i]+r <= 0: continue
+            out.append(r)
 
-    ts = [1,2]
-    for _n in range(3,n+1):
-        b = ts[int(np.floor(len(ts)/2))]
-        S = [b] + [_+b for _ in ts]
-        # Turns out the near optimum estimate from the optimum for n=6 is also optimum!
-        # no need to explore for n=7
-        if len(S) == 6:
-            for _c in utils.itertools.combinations_with_replacement([-2,-1,0,1,2],len(S)):
-                if list(_c).count(-3) > 1: continue
-                if sum(_c) >= 0: continue
-                for _ in set(utils.itertools.permutations(_c)):
-                    tS = np.array(S)+_
-                    if len(set(tS)) < len(S): continue
-                    if any([_ <= 0 for _ in tS]): continue
-                    if check_special(tS):
-                        if sum(tS) < sum(S):
-                            S = sorted(tS)
-                            break
-        ts = S
-    
-    ans = ''
-    for s in ts: ans+=str(s)
-    return ans
+            if i < len(seq)-1:
+                tm,tn = get_possibles(seq,i+1,opts+[r])
+                if i < len(seq)-2:
+                    new += tn
+                else:
+                    t1 = opts+[r]
+                    for v in tm:
+                        topts = t1 + [v]
+                        vals = [a+b for a,b in zip(topts,seq)]
+                        if sum(topts) < 0:
+                            new.append(vals)
 
-def euler103b(n=7):
-    def check_special1(s):
-        if len(s) < 3: return True
-        for n in range(2,len(s)):
-            for _x in utils.itertools.combinations(s,n):
-                _z = set(s).difference(set(_x))
-                if sum(_x) in _z: 
-                    return False
-                for _n in range(1,n+1):
-                    for _y in utils.itertools.combinations(_z,_n):
-                        SB,SC = sum(_x),sum(_y)
-                        sbc = SB > SC if len(_x) != len(_y) else False
-                        if SB == SC or sbc:
-                            return False
-        return True
+        return out,new
 
     def check_special(s):
         if len(s) < 3: return True
@@ -171,8 +118,6 @@ def euler103b(n=7):
                             return False
         return True
 
-    print(check_special([1,2,4,8]))
-
     ts = [2,3,4]
     for _N in range(4,n+1):
         b = ts[int(np.floor(len(ts)/2))]
@@ -186,8 +131,6 @@ def euler103b(n=7):
                 break
         if f:
             ts = S
-    
-        print(_N,ts)
 
     ans = ''
     for s in ts: ans+=str(s)
@@ -223,15 +166,12 @@ def euler105():
             for _x in utils.itertools.combinations(s,n):
                 _z = set(s).difference(set(_x))
                 if sum(_x) in _z: 
-                    print(len(s),_x,_z,n)
                     return False
                 for _n in range(n,n+2):
                     for _y in utils.itertools.combinations(_z,_n):
                         SB,SC = sum(_x),sum(_y)
                         sbc = SB > SC if len(_x) != len(_y) else False
                         if SB == SC or sbc:
-                            
-                            print(len(s),_x,_y,SB,SC)
                             return False
         return True
 
@@ -240,12 +180,7 @@ def euler105():
         x = [int(_) for _ in l.split(',')]
         if check_special(x):
             ans+=sum(x)
-        print(x,ans)
     return ans
-
-test = [1219,1183,1182,1115,1035,1186,591,1197,1167,887,1184,1175]
-t1 = [81,88,75,42,87,84,86,65]
-t2 = [157,150,164,119,79,159,161,139,158]
 
 if __name__ == '__main__':
     # ONE HUNDRED AND ONE:
@@ -262,4 +197,8 @@ if __name__ == '__main__':
 
     # ONE HUNDRED AND FOUR:
     st = time.time()
-    print(f'Problem 104: {euler103()} ({time.time()-st} s)')
+    print(f'Problem 104: {euler104()} ({time.time()-st} s)')
+
+    # ONE HUNDRED AND FIVE:
+    st = time.time()
+    print(f'Problem 105: {euler105()} ({time.time()-st} s)')
