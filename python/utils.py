@@ -44,6 +44,13 @@ def fibonacci(Nterms):
         out[i+2] = out[i]+out[i+1]
     return out
 
+def fibo_large_n(n):
+    p,v = 1,2
+    for i in range(n-3):
+        _v = v+p
+        p,v = v,_v
+    return v
+
 def primes_lt_n(n):
     """ Returns  a list of primes < n """
     n = int(n)
