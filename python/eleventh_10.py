@@ -2,18 +2,7 @@ import numpy as np
 import utils
 import time
 
-def get_subset_pairs(s):
-    spairs = []
-    for n in range(1,len(s)):
-        for _x in utils.itertools.combinations(s,n):
-            _z = set(s).difference(set(_x))
-            for _n in range(n,len(s)-n+1):
-                for _y in utils.itertools.combinations(_z,_n):
-                    if [_y,_x] not in spairs: 
-                        spairs.append([_x,_y])
-    return spairs
-
-def euler101(k):
+def euler101(k=10):
     def lagrange(x,y):
         p = np.poly1d(0)
         for i in range(len(x)):
@@ -193,8 +182,21 @@ def euler105():
             ans+=sum(x)
     return ans
 
-def euler106():
-    pass
+def euler106(n=7):
+    def get_subset_pairs(s):
+        spairs = []
+        count = 0
+        for n in range(2,len(s)//2+1):
+            for _x in utils.itertools.combinations(s,n):
+                _z = set(s).difference(set(_x))
+                for _y in utils.itertools.combinations(_z,n):
+                    if [_y,_x] not in spairs: 
+                        spairs.append([_x,_y])
+                        if not all([i < j for i,j in zip(_x,_y)]):
+                            count+=1
+        return count
+
+    return get_subset_pairs(np.linspace(1,n,n).astype(int))
 
 def euler107():
     pass
@@ -242,7 +244,7 @@ def euler108():
 if __name__ == '__main__':
     # ONE HUNDRED AND ONE:
     st = time.time()
-    print(f'Problem 101: {euler101(10)} ({time.time()-st} s)')
+    print(f'Problem 101: {euler101()} ({time.time()-st} s)')
 
     # ONE HUNDRED AND TWO:
     st = time.time()
@@ -260,7 +262,7 @@ if __name__ == '__main__':
     st = time.time()
     print(f'Problem 105: {euler105()} ({time.time()-st} s)')
 
-    # ONE HUNDRED AND SIX:
+    # ONE HUNDRED AND SIX (just over 1 minute):
     st = time.time()
     print(f'Problem 106: {euler106()} ({time.time()-st} s)')
     
