@@ -2,6 +2,17 @@ import numpy as np
 import utils
 import time
 
+def get_subset_pairs(s):
+    spairs = []
+    for n in range(1,len(s)):
+        for _x in utils.itertools.combinations(s,n):
+            _z = set(s).difference(set(_x))
+            for _n in range(n,len(s)-n+1):
+                for _y in utils.itertools.combinations(_z,_n):
+                    if [_y,_x] not in spairs: 
+                        spairs.append([_x,_y])
+    return spairs
+
 def euler101(k):
     def lagrange(x,y):
         p = np.poly1d(0)
@@ -182,6 +193,52 @@ def euler105():
             ans+=sum(x)
     return ans
 
+def euler106():
+    pass
+
+def euler107():
+    pass
+
+def euler108():
+    def f(x,n):
+        return x*n/(x-n)
+
+    _mx,_my = [],[]
+    mc = 0
+    n = 1
+    dn = 1
+    while True:
+        count = 0
+        x = n+1
+        while True:
+            y = f(x,n)
+            if abs(round(y)-y) < 1.e-10:
+                count += 1
+            x+=1
+            if y < 2*n: break
+
+        if count > 1000:
+            break
+
+        if count > mc:
+            mc = count
+            _mx.append(n)
+            _my.append(count)
+        if len(_mx) > 32:
+            break
+        if len(_mx) > 3:
+            dn = 6
+        if len(_mx) > 6:
+            dn = 30
+        if len(_mx) > 13:
+            dn = 420
+        if len(_mx) > 20:
+            dn = 4620
+
+        n+=dn
+    return n
+    
+
 if __name__ == '__main__':
     # ONE HUNDRED AND ONE:
     st = time.time()
@@ -202,3 +259,15 @@ if __name__ == '__main__':
     # ONE HUNDRED AND FIVE:
     st = time.time()
     print(f'Problem 105: {euler105()} ({time.time()-st} s)')
+
+    # ONE HUNDRED AND SIX:
+    st = time.time()
+    print(f'Problem 106: {euler106()} ({time.time()-st} s)')
+    
+    # ONE HUNDRED AND SEVEN:
+    st = time.time()
+    print(f'Problem 107: {euler107()} ({time.time()-st} s)')
+    
+    # ONE HUNDRED AND FIVE:
+    st = time.time()
+    print(f'Problem 108: {euler108()} ({time.time()-st} s)')
