@@ -1,6 +1,7 @@
 import numpy as np
 import utils
 import time
+import matplotlib.pyplot as plt    
 
 def euler101(k=10):
     def lagrange(x,y):
@@ -199,7 +200,29 @@ def euler106(n=7):
     return get_subset_pairs(np.linspace(1,n,n).astype(int))
 
 def euler107():
-    pass
+    first = True
+    for line in open('dat/e107.dat','r').readlines():
+        row = np.array(line.replace('-','0').replace('\n','').split(',')).astype(float)
+        if first:
+            first=False
+            mat = row
+        else:
+            mat = np.vstack((mat,row))
+    F = [0]
+    ans = 0
+    while True:
+        mn = 1000
+        for i in F:
+            for j in range(len(mat)):
+                if mat[i,j] == 0 or j in F: continue
+                if mat[i,j] < mn:
+                    mn = mat[i,j]
+                    _i,_j = i,j
+        F.append(_j)
+        ans+=mn
+        if len(F) == len(mat): break
+
+    return int(mat.sum()/2)-int(ans)
 
 def euler108():
     def f(x,n):
