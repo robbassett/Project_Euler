@@ -208,6 +208,8 @@ def euler107():
             mat = row
         else:
             mat = np.vstack((mat,row))
+
+    # Solved with Prim's algorithm
     F = [0]
     ans = 0
     while True:
@@ -263,6 +265,43 @@ def euler108():
         n+=dn
     return n
     
+def euler109():
+    scores = np.linspace(1,20,20).astype(int)
+    scores = np.concatenate((scores,[25]))
+    doubles = scores*2
+    all_vals = [str(_)+'S' for _ in scores] + [str(_)+'D' for _ in scores] + [str(_)+'T' for _ in scores[:-1]]
+
+    md = {'S':1,'D':2,'T':3}
+    cd = {}
+    for val in list(doubles):
+        cd[val] = 1
+
+    for comb in utils.itertools.combinations_with_replacement(all_vals,2):
+        if not any (['D' in _ for _ in comb]): continue
+        V = int(comb[0][:-1])*md[comb[0][-1]]+int(comb[1][:-1])*md[comb[1][-1]]
+        if V > 99: continue
+        if V not in cd.keys():
+            cd[V] = 1
+        else:
+            cd[V] += 1
+        if all(['D' in _ for _ in comb]) and comb[0] != comb[1]:
+            cd[V] += 1
+
+    for comb in utils.itertools.combinations_with_replacement(all_vals,3):
+        if not any (['D' in _ for _ in comb]): continue
+        V = int(comb[0][:-1])*md[comb[0][-1]]+int(comb[1][:-1])*md[comb[1][-1]]+int(comb[2][:-1])*md[comb[2][-1]]
+        ds = [_ for _ in comb if 'D' in _]
+        if V > 99: continue
+        if V not in cd.keys():
+            cd[V] = len(set(ds))
+        else:
+            cd[V] += len(set(ds))
+
+    ans = 0
+    for k,i in cd.items():
+        ans+=i
+    return ans
+
 
 if __name__ == '__main__':
     # ONE HUNDRED AND ONE:
@@ -293,6 +332,10 @@ if __name__ == '__main__':
     st = time.time()
     print(f'Problem 107: {euler107()} ({time.time()-st} s)')
     
-    # ONE HUNDRED AND FIVE:
+    # ONE HUNDRED AND EIGHT:
     st = time.time()
     print(f'Problem 108: {euler108()} ({time.time()-st} s)')
+    
+    # ONE HUNDRED AND NINE:
+    st = time.time()
+    print(f'Problem 109: {euler109()} ({time.time()-st} s)')

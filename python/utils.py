@@ -35,7 +35,20 @@ def big_factorial(N):
                 V = V+[int(c)]
             carry = 0
     return V
-            
+
+def count_combs(vals,total):
+    combs = np.zeros((total+1,len(vals)))
+    for v in range(combs.shape[0]):
+        target = v+1
+        for i,c in enumerate(vals):
+            ind = target-c-1
+            if ind < 0: ind += len(combs)
+            if i == 0: combs[v][i] = 1
+            elif c <= target:
+                combs[v][i] = combs[v][i-1] + combs[ind][i]
+            else:
+                combs[v][i] = combs[v][i-1]
+    return int(combs[-1][-1])  
 
 def fibonacci(Nterms):
     out = np.zeros(Nterms)
