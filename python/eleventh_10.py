@@ -1,7 +1,7 @@
 import numpy as np
 import utils
 import time
-import matplotlib.pyplot as plt    
+import copy
 
 def euler101(k=10):
     def lagrange(x,y):
@@ -251,7 +251,7 @@ def euler108():
             mc = count
             _mx.append(n)
             _my.append(count)
-        if len(_mx) > 32:
+        if len(_mx) > 36:
             break
         if len(_mx) > 3:
             dn = 6
@@ -302,6 +302,42 @@ def euler109():
         ans+=i
     return ans
 
+def euler110():
+    def calc_divs(exps):
+        out = 1
+        for e in exps:
+            out = int(out)*int(2*e+1)
+        return out
+    
+    def calc_n(ps,exps):
+        out = 1
+        for p,e in zip(ps,exps):
+            tm = int(np.power(p,e))
+            out = int(out)*int(tm)
+        return out
+
+    mn = 1.e25
+    for nprimes in [8,9,10,11,12,13,14]:
+        ps = utils.n_primes(nprimes)
+        for e1 in range(1,10):
+            exps = np.zeros(len(ps),dtype=int)
+            exps[0] = e1
+            mx = 0
+            while True:
+                mx += 1
+                for e in range(2,len(exps)):
+                    exps[e] = 1
+                for e in range(1,len(exps)):
+                    if exps[e] < exps[e-1] and exps[e] <= mx:
+                        exps[e]+=1
+                    if calc_divs(exps) > (8e6)-1:
+                        n = calc_n(ps,exps)
+                        if n < mn:
+                            mn = copy.copy(n)
+                if exps[1] >= exps[0]:
+                    break
+
+    return mn
 
 if __name__ == '__main__':
     # ONE HUNDRED AND ONE:
@@ -339,3 +375,7 @@ if __name__ == '__main__':
     # ONE HUNDRED AND NINE:
     st = time.time()
     print(f'Problem 109: {euler109()} ({time.time()-st} s)')
+    
+    # ONE HUNDRED AND TEN:
+    st = time.time()
+    print(f'Problem 110: {euler110()} ({time.time()-st} s)')
