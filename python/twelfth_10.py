@@ -58,6 +58,14 @@ def euler112(target=0.5):
     for _ in n: ans+=str(_)
     return int(ans)
 
+def euler120():
+    ans = 0
+    x = 2
+    for a in range(3,1001):
+        ans += x*a
+        if a%2 == 0: x+=2
+    return ans
+
 if __name__ == '__main__':
 
     # ONE HUNDRED AND ELEVEN:
@@ -67,3 +75,7 @@ if __name__ == '__main__':
     # ONE HUNDRED AND TWELVE:
     st = time.time()
     print(f'Problem 112: {euler112(.99)} ({time.time()-st} s)')
+    
+    # ONE HUNDRED AND TWENTY:
+    st = time.time()
+    print(f'Problem 120: {euler120()} ({time.time()-st} s)')

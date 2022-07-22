@@ -2,6 +2,12 @@ import numpy as np
 import itertools
 import copy
 
+def int_power(a,p):
+    out = 1
+    for _ in range(p):
+        out = int(out)*int(a)
+    return out
+
 def char_position(letter):
     if letter.islower():
         return ord(letter) - 96
