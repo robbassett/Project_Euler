@@ -3,6 +3,7 @@ from utils import *
 import time
 import itertools
 
+#TESTSETT
 # PROJECT EULER 21
 def euler21(N):
     def fsum(n):
