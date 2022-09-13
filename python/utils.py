@@ -29,6 +29,12 @@ def factorial(N):
     else:
         return 1
 
+def triangle(N):
+    if N != 0:
+        return int(np.linspace(1,N,N).sum())
+    else:
+        return 0
+
 def big_factorial(N):
     V = [1]
     carry = 0

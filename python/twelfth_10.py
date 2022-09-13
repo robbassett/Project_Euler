@@ -3,7 +3,6 @@ import utils
 import time
 import copy
 
-# TEST TEST
 def euler111():
     return 'Not solved'
 
@@ -67,6 +66,66 @@ def euler113():
 
     return int(combs(110,10) + combs(109,9) - 2 - 10*100)
 
+def euler114(N=7):
+    cache = [0]*(N+1)
+    def F(N,n):
+        out=1
+        if n > N:
+            return out
+        if cache[N] != 0:
+            return cache[N]
+        for s in range(N-n+1):
+            for b in range(n,N-s+1):
+                out += F(N-s-b-1,n)
+
+        cache[N] = out
+        return out
+
+    return F(N,3)  
+
+def euler115(m=3):
+    cache = {}
+    def F(N,n):
+        out=1
+        if n > N:
+            return out
+        if N in cache.keys():
+            return cache[N]
+        for s in range(N-n+1):
+            for b in range(n,N-s+1):
+                out += F(N-s-b-1,n)
+
+        cache[N] = out
+        return out
+    
+    N = 15
+    while True:
+        cv = F(N,m)
+        if cv > 1e6:
+            break
+        N+=1
+    return N
+
+def euler116(N=5):
+    cache = {}
+    def F(N,n):
+        out=0
+        if n > N:
+            return out
+        if N in cache.keys():
+            return cache[N]
+        for s in range(N-n+1):
+            out += F(N-s-n,n)+1
+
+        cache[N] = out
+        return out
+
+    out = 0
+    for _ in [2,3,4]:
+        cache = {}
+        out += F(N,_)
+    return out
+
 def euler120():
     ans = 0
     x = 2
@@ -88,7 +147,19 @@ if __name__ == '__main__':
     # ONE HUNDRED AND THIRTEEN:
     st = time.time()
     print(f'Problem 113: {euler113()} ({time.time()-st} s)')
+
+    # ONE HUNDRED AND FOURTEEN
+    st = time.time()
+    print(f'Problem 114: {euler114(50)} ({time.time()-st} s)')
+
+    # ONE HUNDRED AND FIFTEEN
+    st = time.time()
+    print(f'Problem 115: {euler115(50)} ({time.time()-st} s)')
     
+    # ONE HUNDRED AND SIXTEEN
+    st = time.time()
+    print(f'Problem 116: {euler116(50)} ({time.time()-st} s)')
+
     # ONE HUNDRED AND TWENTY:
     st = time.time()
     print(f'Problem 120: {euler120()} ({time.time()-st} s)')
