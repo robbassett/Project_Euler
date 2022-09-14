@@ -3,8 +3,38 @@ import utils
 import time
 import copy
 
-def euler111():
+# Need to idenitfy a targetted approach...
+def euler111(d=4):
     return 'Not solved'
+
+    def check_repeats(n):
+        out = {}
+        for x in range(10):
+            c = str(n).count(str(x))
+            if c > 1:
+                out[x] = c
+        return out
+
+    v = int('1'+'0'*(d-1))+1
+    counts = {}
+    for x in range(10):
+        counts[x] = {}
+    while len(str(v)) == d:
+        rds = check_repeats(v)
+        if len(rds.keys()) > 0:
+            if utils.mr_ptest(v):
+                for k,i in rds.items():
+                    if i not in counts[k].keys():
+                        counts[k][i] = [v]
+                    else:
+                        counts[k][i].append(v)
+        v += 2
+
+    ans = 0
+    for k,i in counts.items():
+        ans += sum(i[max(list(i.keys()))])
+
+    return ans
 
 # This one is probably way longer than necessary...
 # was going to do some clever stuff to optimise, but it's not that slow so whatever (see 113)
@@ -126,6 +156,24 @@ def euler116(N=5):
         out += F(N,_)
     return out
 
+
+def euler119():
+    def digit_sum(n):
+        if len(str(n)) == 1:
+            return -1
+        return sum([int(_) for _ in str(n)])
+
+    vs = []
+    a = 1
+    while len(vs) < 50:
+        a+=1
+        for p in range(2,51):
+            if digit_sum(a**p) == a:
+                vs.append(a**p)
+    vs.sort()    
+    
+    return vs[29]
+
 def euler120():
     ans = 0
     x = 2
@@ -159,6 +207,10 @@ if __name__ == '__main__':
     # ONE HUNDRED AND SIXTEEN
     st = time.time()
     print(f'Problem 116: {euler116(50)} ({time.time()-st} s)')
+
+    # ONE HUNDRED AND NINETEEN:
+    st = time.time()
+    print(f'Problem 119: {euler119()} ({time.time()-st} s)')
 
     # ONE HUNDRED AND TWENTY:
     st = time.time()

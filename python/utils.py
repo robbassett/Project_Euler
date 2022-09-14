@@ -2,6 +2,33 @@ import numpy as np
 import itertools
 import copy
 
+def prod(l):
+    o=1
+    for p in l: o*=int(p)
+    return o
+
+def mr_ptest(n,k=5):
+    if n%2 == 0:
+        return False
+    
+    s,t = n-1,0
+    while s%2 == 0:
+        s = s//2
+        t += 1
+
+    for _ in range(k):
+        v = (np.random.randint(2,n-1)**s)%n
+        if v != 1:
+            i = 0
+            while v != (n-1):
+                if i == t-1:
+                    return False
+                else:
+                    i = i+1
+                    v = (v**2)%n
+    return True
+
+
 def int_power(a,p):
     out = 1
     for _ in range(p):
@@ -103,6 +130,12 @@ def n_primes(n):
 def is_prime(n):
     """function to find if the given
     number is prime"""
+    if n == 2:
+        return True
+
+    if n%2 == 0:
+        return False
+
     for i in range(3, int(n**0.5)+1, 2):
         if n % i == 0:
             return False
